@@ -1,0 +1,2891 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minimarket A.T.R. | Abarrotes, Bebidas, Lácteos y Despensa en Padre Las Casas</title>
+    <meta name="description" content="Minimarket A.T.R. en Padre Las Casas y Temuco. Abarrotes, lácteos del día, panadería, cecinas, bebidas frías, snacks, congelados, aseo y licores seleccionados con despacho rápido y pedidos directos por WhatsApp.">
+    <meta name="theme-color" content="#000000">
+    <link rel="icon" type="image/svg+xml" href="logo.svg">
+
+    <!-- Tipografía: 100% Sans-Serif (Outfit + Plus Jakarta Sans) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        atr: {
+                            base: "#000000",       // Negro puro
+                            dark: "#141414",       // Neutro oscuro sin azul
+                            surface: "#FFFFFF",    // Superficie blanca
+                            bg: "#FAFAFA",         // Fondo neutro limpio sin azul
+                            border: "#E5E5E5",     // Borde neutro
+                            borderDark: "#262626", // Borde oscuro neutro
+                            red: "#DC2626",        // Ofertas retail
+                            redHover: "#B91C1C",
+                            wine: "#7F1D1D",       // Acento vino cálido
+                            amber: "#D97706",      // Acento ámbar
+                            gold: "#CA8A04",       // Insignias
+                            textDark: "#0A0A0A",   // Texto negro profundo
+                            textMuted: "#737373",  // Texto secundario neutro
+                            green: "#10B981",      // Disponibilidad
+                            whatsapp: "#25D366"    // WhatsApp oficial
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['"Outfit"', '"Plus Jakarta Sans"', 'system-ui', '-apple-system', 'sans-serif'],
+                        serif: ['"Outfit"', '"Plus Jakarta Sans"', 'sans-serif'],
+                    },
+                    boxShadow: {
+                        'subtle': '0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px -1px rgba(0, 0, 0, 0.05)',
+                        'card': '0 4px 14px 0 rgba(15, 23, 42, 0.05)',
+                        'card-hover': '0 12px 28px -4px rgba(15, 23, 42, 0.12)',
+                        'drawer': '-10px 0 40px -5px rgba(15, 23, 42, 0.25)',
+                        'modal': '0 25px 50px -12px rgba(15, 23, 42, 0.35)'
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #FAFAFA; color: #0A0A0A;
+            font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+        }
+
+        /* Ocultar scrollbar pero permitir scroll nativo fluido */
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        /* Clamping de texto para títulos uniformes */
+        .line-clamp-1 {
+            display: -webkit-box;
+            -webkit-line-clamp: 1;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        .line-clamp-2 {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        /* Suavizado de bordes para imágenes y transiciones */
+        .img-container {
+            background: radial-gradient(circle at center, #FFFFFF 60%, #F5F5F5 100%);
+        }
+
+        /* Badge pulse para ofertas */
+        @keyframes pulse-subtle {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.85; }
+        }
+        .animate-pulse-subtle {
+            animation: pulse-subtle 2.5s infinite ease-in-out;
+        }
+    </style>
+</head>
+<body class="font-sans antialiased min-h-screen flex flex-col pb-16 md:pb-0">
+
+    <!-- ==========================================
+         CONFIGURACIÓN CENTRALIZADA DEL MINIMARKET
+    =========================================== -->
+    <script>
+        const STORE_CONFIG = {
+            name: "Minimarket A.T.R.",
+            tagline: "Abarrotes • Lácteos • Bebidas • Snacks • Licores",
+            address: "Mac Iver #1945, Padre Las Casas, Chile",
+            mapCoordinates: "-38.7565,-72.5982",
+            googleMapsUrl: "https://maps.google.com/?q=Mac+Iver+1945,+Padre+Las+Casas,+Chile",
+            embedMapUrl: "https://maps.google.com/maps?q=Mac+Iver+1945,+Padre+Las+Casas,+Araucan%C3%ADa,+Chile&t=&z=15&ie=UTF8&iwloc=&output=embed",
+            whatsappNumber: "56931171649", // Teléfono comercial configurable
+            whatsappDisplay: "+56 9 3117 1649",
+            instagramUrl: "https://www.instagram.com/minimarketatr/",
+            instagramHandle: "@minimarketatr",
+            deliveryArea: "Padre Las Casas y Temuco Urbano",
+            schedule: "Lunes a Domingo: 09:30 a 00:00 hrs continuado",
+            freeDeliveryThreshold: 35000,
+            freeDeliveryPromoText: "DESPACHO GRATIS EN PADRE LAS CASAS POR COMPRAS SOBRE $35.000",
+            wholesaleNotice: "Venta mayorista en fardos y cajas cerradas para almacenes, negocios y familias."
+        };
+
+        const CATEGORIES = [
+            { id: "all", name: "Todo el Minimarket", icon: "ph-squares-four" },
+            { id: "despensa", name: "Abarrotes & Despensa", icon: "ph-shopping-bag-open" },
+            { id: "lacteos", name: "Lácteos & Huevos", icon: "ph-egg" },
+            { id: "bebidas", name: "Bebidas & Jugos", icon: "ph-drop" },
+            { id: "panaderia", name: "Panadería & Cecinas", icon: "ph-bread" },
+            { id: "snacks", name: "Snacks & Dulces", icon: "ph-cookie" },
+            { id: "congelados", name: "Congelados & Hielo", icon: "ph-snowflake" },
+            { id: "aseo", name: "Aseo & Hogar", icon: "ph-sparkle" },
+            { id: "licores", name: "Cervezas & Licores", icon: "ph-beer-bottle" }
+        ];
+
+        const PRODUCTS = [
+            // Abarrotes y Despensa
+            {
+                id: 1,
+                brand: "Belmont",
+                name: "Aceite 100% Puro Maravilla",
+                format: "900ml",
+                price: 2490,
+                oldPrice: 2890,
+                category: "despensa",
+                img: "https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?q=80&w=700&auto=format&fit=crop",
+                badge: "OFERTA",
+                isOffer: true,
+                rating: 4.9,
+                description: "Aceite vegetal 100% puro de maravilla, ideal para cocinar, freír y aliñar ensaladas con sabor neutro y textura ligera."
+            },
+            {
+                id: 2,
+                brand: "Tucapel",
+                name: "Arroz Grado 1 Largo Fino Seleccionado",
+                format: "1 Kilo",
+                price: 1790,
+                oldPrice: 2090,
+                category: "despensa",
+                img: "https://images.unsplash.com/photo-1586201375761-83865001e31c?q=80&w=700&auto=format&fit=crop",
+                badge: "OFERTA",
+                isOffer: true,
+                rating: 4.8,
+                description: "Arroz de grano largo y fino seleccionado, graneado perfecto para acompañar todos tus almuerzos familiares."
+            },
+            {
+                id: 3,
+                brand: "Carozzi",
+                name: "Fideos Spaghetti N°5 Tradicional",
+                format: "400g",
+                price: 990,
+                oldPrice: 1190,
+                category: "despensa",
+                img: "https://images.unsplash.com/photo-1621996346565-e3d5d6281290?q=80&w=700&auto=format&fit=crop",
+                badge: "OFERTA",
+                isOffer: true,
+                rating: 4.8,
+                description: "Elaborados con sémola de trigo candeal seleccionada. Cocción al dente en 8 a 10 minutos con textura firme."
+            },
+            {
+                id: 4,
+                brand: "Carozzi",
+                name: "Salsa de Tomate Pomarola Italiana",
+                format: "200g",
+                price: 690,
+                oldPrice: null,
+                category: "despensa",
+                img: "https://images.unsplash.com/photo-1572449043416-55f4685c9bb7?q=80&w=700&auto=format&fit=crop",
+                rating: 4.7,
+                description: "Salsa de tomate clásica lista para servir con trocitos de cebolla, orégano y especias naturales seleccionadas."
+            },
+            {
+                id: 5,
+                brand: "Nescafé",
+                name: "Café Instantáneo Nescafé Tradición",
+                format: "170g",
+                price: 4890,
+                oldPrice: 5490,
+                category: "despensa",
+                img: "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?q=80&w=700&auto=format&fit=crop",
+                badge: "OFERTA",
+                isOffer: true,
+                rating: 4.9,
+                description: "El café soluble más querido de Chile. Tostado medio con aroma profundo y sabor inconfundible para cada mañana."
+            },
+            {
+                id: 6,
+                brand: "Iansa",
+                name: "Azúcar Blanca Granulada Pura",
+                format: "1 Kilo",
+                price: 1390,
+                oldPrice: null,
+                category: "despensa",
+                img: "https://images.unsplash.com/photo-1581441363689-1f3c3c414635?q=80&w=700&auto=format&fit=crop",
+                rating: 4.8,
+                description: "Azúcar pura granulada de rápida disolución, indispensable en tu despensa para repostería, té, café y jugos."
+            },
+            {
+                id: 7,
+                brand: "San José",
+                name: "Lomitos de Atún en Aceite Vegetal",
+                format: "160g",
+                price: 1490,
+                oldPrice: 1790,
+                category: "despensa",
+                img: "https://images.unsplash.com/photo-1534422298391-e4f8c172dddb?q=80&w=700&auto=format&fit=crop",
+                badge: "OFERTA",
+                isOffer: true,
+                rating: 4.8,
+                description: "Lomitos compactos de atún claro conservados en fino aceite vegetal, ricos en proteínas y ácidos grasos Omega 3."
+            },
+            {
+                id: 8,
+                brand: "Hellmann's",
+                name: "Mayonesa Clásica Cremosa Doypack",
+                format: "472g",
+                price: 2490,
+                oldPrice: 2890,
+                category: "despensa",
+                img: "https://images.unsplash.com/photo-1563729784474-d77dbb933a9e?q=80&w=700&auto=format&fit=crop",
+                badge: "OFERTA",
+                isOffer: true,
+                rating: 4.9,
+                description: "La mayonesa más cremosa e irresistible, elaborada con huevos de campo e ingredientes de primera calidad."
+            },
+
+            // Lácteos y Huevos
+            {
+                id: 9,
+                brand: "Colun",
+                name: "Leche Entera Natural Tetra",
+                format: "1 Litro",
+                price: 1190,
+                oldPrice: null,
+                category: "lacteos",
+                img: "https://images.unsplash.com/photo-1550583724-b2692b85b150?q=80&w=700&auto=format&fit=crop",
+                rating: 4.9,
+                description: "Leche 100% natural recolectada en campos del sur de Chile. Ultra pasteurizada, fresca, cremosa y nutritiva."
+            },
+            {
+                id: 10,
+                brand: "Colun",
+                name: "Queso Gauda Laminado Tradicional",
+                format: "250g",
+                price: 2990,
+                oldPrice: 3490,
+                category: "lacteos",
+                img: "https://images.unsplash.com/photo-1486297678162-eb2a19b0a32d?q=80&w=700&auto=format&fit=crop",
+                badge: "OFERTA",
+                isOffer: true,
+                rating: 4.9,
+                description: "Queso gauda madurado con la tradicional receta del sur. Fundido suave y sabor perfecto para pan caliente y sándwiches."
+            },
+            {
+                id: 11,
+                brand: "Colun",
+                name: "Mantequilla con Sal Pan del Sur",
+                format: "250g",
+                price: 2890,
+                oldPrice: null,
+                category: "lacteos",
+                img: "https://images.unsplash.com/photo-1589985270826-4b7bb135bc9d?q=80&w=700&auto=format&fit=crop",
+                rating: 4.8,
+                description: "Elaborada exclusivamente con crema de leche fresca pasteurizada y una pizca de sal. Textura suave para untar."
+            },
+            {
+                id: 12,
+                brand: "Campo Sur",
+                name: "Huevos de Campo Extra Grandes Seleccionados",
+                format: "Bandeja 12 Unid",
+                price: 3490,
+                oldPrice: 3990,
+                category: "lacteos",
+                img: "https://images.unsplash.com/photo-1582722872445-44dc5f7e3c8f?q=80&w=700&auto=format&fit=crop",
+                badge: "OFERTA",
+                isOffer: true,
+                rating: 4.9,
+                description: "Huevos frescos colorados de gallinas libres de jaula criadas en el campo. Yema densa y alto valor proteico."
+            },
+            {
+                id: 13,
+                brand: "Soprole",
+                name: "Yogur Batido Frutilla Pote",
+                format: "120g",
+                price: 450,
+                oldPrice: null,
+                category: "lacteos",
+                img: "https://images.unsplash.com/photo-1571212515416-fef01fc43637?q=80&w=700&auto=format&fit=crop",
+                rating: 4.7,
+                description: "Yogur batido con leche fresca y dulce toque de frutilla, fortificado con calcio y vitamina D para el desayuno y colación."
+            },
+
+            // Bebidas, Jugos y Aguas
+            {
+                id: 14,
+                brand: "Coca-Cola",
+                name: "Bebida Coca-Cola Sabor Original",
+                format: "2.5 Litros",
+                price: 2690,
+                oldPrice: 2990,
+                category: "bebidas",
+                img: "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?q=80&w=700&auto=format&fit=crop",
+                badge: "OFERTA",
+                isOffer: true,
+                rating: 4.9,
+                description: "El sabor clásico más refrescante en formato familiar de 2.5 litros, perfecto para la mesa del almuerzo y la once."
+            },
+            {
+                id: 15,
+                brand: "Sprite",
+                name: "Bebida Sprite Lima Limón Refrescante",
+                format: "2.5 Litros",
+                price: 2590,
+                oldPrice: null,
+                category: "bebidas",
+                img: "https://images.unsplash.com/photo-1625772299848-391b6a87d7b3?q=80&w=700&auto=format&fit=crop",
+                rating: 4.8,
+                description: "Sabor cítrico intenso y burbujas chispeantes de lima-limón 100% natural para apagar la sed en días calurosos."
+            },
+            {
+                id: 16,
+                brand: "Monster Energy",
+                name: "Bebida Energética Monster Green Original",
+                format: "473cc",
+                price: 1990,
+                oldPrice: 2290,
+                category: "bebidas",
+                img: "https://images.unsplash.com/photo-1624517452488-04869289c4ca?q=80&w=700&auto=format&fit=crop",
+                badge: "OFERTA",
+                isOffer: true,
+                rating: 4.9,
+                description: "La fórmula de energía más potente con taurina, cafeína, l-carnitina y vitaminas del complejo B. Disponible bien fría."
+            },
+            {
+                id: 17,
+                brand: "Red Bull",
+                name: "Bebida Energética Red Bull Original",
+                format: "250cc",
+                price: 1890,
+                oldPrice: null,
+                category: "bebidas",
+                img: "https://images.unsplash.com/photo-1543257580-7269da773bf5?q=80&w=700&auto=format&fit=crop",
+                rating: 4.8,
+                description: "Fórmula austriaca premium que revitaliza cuerpo y mente con cafeína de alta calidad y aminoácidos esenciales."
+            },
+            {
+                id: 18,
+                brand: "Cachantun",
+                name: "Agua Mineral Cachantun con Gas de Manantial",
+                format: "1.6 Litros",
+                price: 1190,
+                oldPrice: null,
+                category: "bebidas",
+                img: "https://images.unsplash.com/photo-1548839140-29a749e1bc4e?q=80&w=700&auto=format&fit=crop",
+                rating: 4.7,
+                description: "Agua mineral pura nacida en fuentes naturales precordilleranas con finas burbujas equilibradas y minerales saludables."
+            },
+            {
+                id: 19,
+                brand: "Watt's",
+                name: "Néctar Selección Durazno Valle Central",
+                format: "1.5 Litros",
+                price: 1690,
+                oldPrice: 1990,
+                category: "bebidas",
+                img: "https://images.unsplash.com/photo-1621506289937-a8e4df240d0b?q=80&w=700&auto=format&fit=crop",
+                badge: "OFERTA",
+                isOffer: true,
+                rating: 4.8,
+                description: "Elaborado con pulpa de duraznos maduros chilenos, textura suave y enriquecido con vitamina C para compartir."
+            },
+
+            // Panadería y Cecinas
+            {
+                id: 20,
+                brand: "Ideal",
+                name: "Pan de Molde Blanco Familiar Suave",
+                format: "560g",
+                price: 2590,
+                oldPrice: 2990,
+                category: "panaderia",
+                img: "https://images.unsplash.com/photo-1509440159596-0249088772ff?q=80&w=700&auto=format&fit=crop",
+                badge: "OFERTA",
+                isOffer: true,
+                rating: 4.8,
+                description: "Pan de molde extra blanco y esponjoso con rebanadas parejas. Perfecto para tostadas doradas y sándwiches al desayuno."
+            },
+            {
+                id: 21,
+                brand: "PF",
+                name: "Jamón Pierna Artesanal Laminado Fino",
+                format: "200g",
+                price: 2990,
+                oldPrice: 3490,
+                category: "panaderia",
+                img: "https://images.unsplash.com/photo-1524438418049-ab2acb7aa48f?q=80&w=700&auto=format&fit=crop",
+                badge: "OFERTA",
+                isOffer: true,
+                rating: 4.9,
+                description: "Jamón cocido de pierna de cerdo premium con corte artesanal suave, bajo en grasas y de frescura garantizada."
+            },
+            {
+                id: 22,
+                brand: "Llanquihue",
+                name: "Vienesas Tradicionales Ahumadas Receta Alemana",
+                format: "Pack 5 Unid",
+                price: 2490,
+                oldPrice: null,
+                category: "panaderia",
+                img: "https://images.unsplash.com/photo-1629814249584-bd4d53cf0e7d?q=80&w=700&auto=format&fit=crop",
+                rating: 4.9,
+                description: "Las inconfundibles vienesas del sur elaboradas con carne seleccionada y suave ahumado en maderas nativas."
+            },
+            {
+                id: 23,
+                brand: "PF",
+                name: "Salame Italiano Ahumado Especial Laminado",
+                format: "100g",
+                price: 1890,
+                oldPrice: null,
+                category: "panaderia",
+                img: "https://images.unsplash.com/photo-1544025162-d76694265947?q=80&w=700&auto=format&fit=crop",
+                rating: 4.8,
+                description: "Salame curado con pimienta blanca y especias tradicionales, ideal para acompañar picoteos, tablas y pan amasado."
+            },
+            {
+                id: 24,
+                brand: "Los Tilos",
+                name: "Queso Chanco del Sur Laminado Cremoso",
+                format: "250g",
+                price: 2790,
+                oldPrice: 3190,
+                category: "panaderia",
+                img: "https://images.unsplash.com/photo-1452195100486-9cc805987862?q=80&w=700&auto=format&fit=crop",
+                badge: "OFERTA",
+                isOffer: true,
+                rating: 4.8,
+                description: "Queso chanco madurado con textura mantecosa y ojos característicos, sabor suave y derretido irresistible en marraqueta."
+            },
+
+            // Snacks y Golosinas
+            {
+                id: 25,
+                brand: "Lay's",
+                name: "Papas Fritas Corte Liso Bolsa Familiar",
+                format: "200g",
+                price: 2490,
+                oldPrice: 2890,
+                category: "snacks",
+                img: "https://images.unsplash.com/photo-1566478989037-eec170784d0b?q=80&w=700&auto=format&fit=crop",
+                badge: "OFERTA",
+                isOffer: true,
+                rating: 4.9,
+                description: "Papas 100% naturales, doradas al punto justo y crujientes con el toque exacto de sal. El snack infaltable de la tarde."
+            },
+            {
+                id: 26,
+                brand: "Doritos",
+                name: "Doritos Mega Queso Tex-Mex Familiar",
+                format: "190g",
+                price: 2390,
+                oldPrice: null,
+                category: "snacks",
+                img: "https://images.unsplash.com/photo-1600952841320-db92ec4047ca?q=80&w=700&auto=format&fit=crop",
+                rating: 4.8,
+                description: "Crujientes totopos triangulares de maíz horneados con una capa intensa y adictiva de auténtico queso nacho."
+            },
+            {
+                id: 27,
+                brand: "Evercrisp",
+                name: "Ramitas Sabor Queso Clásicas",
+                format: "150g",
+                price: 1690,
+                oldPrice: null,
+                category: "snacks",
+                img: "https://images.unsplash.com/photo-1599490659213-e2b9527bd087?q=80&w=700&auto=format&fit=crop",
+                rating: 4.8,
+                description: "El snack tradicional de los cumpleaños y picoteos chilenos. Bastoncitos extra crocantes con sabroso queso maduro."
+            },
+            {
+                id: 28,
+                brand: "Nestlé",
+                name: "Chocolate Sahne-Nuss Barra con Almendras",
+                format: "100g",
+                price: 2290,
+                oldPrice: 2690,
+                category: "snacks",
+                img: "https://images.unsplash.com/photo-1549007994-cb92caebd54b?q=80&w=700&auto=format&fit=crop",
+                badge: "OFERTA",
+                isOffer: true,
+                rating: 4.9,
+                description: "Delicioso chocolate con leche suizo relleno con abundantes almendras enteras tostadas crujientes. Placer garantizado."
+            },
+            {
+                id: 29,
+                brand: "Costa",
+                name: "Galletas Frac Chocolate Rellenas Crema",
+                format: "Tubo 126g",
+                price: 890,
+                oldPrice: null,
+                category: "snacks",
+                img: "https://images.unsplash.com/photo-1558961363-fa8fdf82db35?q=80&w=700&auto=format&fit=crop",
+                rating: 4.8,
+                description: "Galletas sándwich crujientes de cacao intenso rellenas con suave y dulce crema de vainilla, clásicas de la once."
+            },
+            {
+                id: 30,
+                brand: "Marco Polo",
+                name: "Maní Salado Tostado sin Piel",
+                format: "180g",
+                price: 1390,
+                oldPrice: null,
+                category: "snacks",
+                img: "https://images.unsplash.com/photo-1536591375315-1b836821db77?q=80&w=700&auto=format&fit=crop",
+                rating: 4.7,
+                description: "Maní tostado al punto justo con una pizca de sal de mar, perfecto para compartir en la previa o picoteo familiar."
+            },
+
+            // Congelados y Hielo
+            {
+                id: 31,
+                brand: "Glaciar Sur",
+                name: "Hielo en Cubos Purificado Bolsa Resistente",
+                format: "Bolsa 2 Kilos",
+                price: 1990,
+                oldPrice: null,
+                category: "congelados",
+                img: "https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?q=80&w=700&auto=format&fit=crop",
+                rating: 4.9,
+                description: "Cubos de hielo transparentes y duraderos elaborados con agua doblemente purificada. No alteran el sabor de tragos y jugos."
+            },
+            {
+                id: 32,
+                brand: "Savory",
+                name: "Helado Danky Clásico Vainilla & Caramelo",
+                format: "Cono 110ml",
+                price: 1890,
+                oldPrice: null,
+                category: "congelados",
+                img: "https://images.unsplash.com/photo-1501443762994-82bd5dace89a?q=80&w=700&auto=format&fit=crop",
+                rating: 4.8,
+                description: "Cono barquillo crujiente bañado en chocolate, relleno de helado de crema americana con corazón de caramelo y corona de maní."
+            },
+            {
+                id: 33,
+                brand: "Minuto Verde",
+                name: "Papas Prefritas Corte Tradicional Bolsa",
+                format: "1 Kilo",
+                price: 3490,
+                oldPrice: 3990,
+                category: "congelados",
+                img: "https://images.unsplash.com/photo-1573080496219-bb080dd4f877?q=80&w=700&auto=format&fit=crop",
+                badge: "OFERTA",
+                isOffer: true,
+                rating: 4.8,
+                description: "Papas naturales seleccionadas listas para freír o preparar en air fryer. Doradas y crujientes por fuera, suaves por dentro."
+            },
+            {
+                id: 34,
+                brand: "La Crianza",
+                name: "Hamburguesas Vacuno Receta Casera",
+                format: "Pack 2x100g",
+                price: 2290,
+                oldPrice: null,
+                category: "congelados",
+                img: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?q=80&w=700&auto=format&fit=crop",
+                rating: 4.8,
+                description: "Hamburguesas 100% carne de vacuno seleccionada con condimento suave artesanal. Jugosas y listas en sartén o parrilla."
+            },
+
+            // Aseo y Hogar
+            {
+                id: 35,
+                brand: "Elite",
+                name: "Papel Higiénico Ultra Suave Doble Hoja",
+                format: "Pack 4 Rollos",
+                price: 2490,
+                oldPrice: 2890,
+                category: "aseo",
+                img: "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?q=80&w=700&auto=format&fit=crop",
+                badge: "OFERTA",
+                isOffer: true,
+                rating: 4.8,
+                description: "Doble hoja con tecnología de microrelieve que combina máxima suavidad, resistencia y absorción para el cuidado familiar."
+            },
+            {
+                id: 36,
+                brand: "Quix",
+                name: "Lavalozas Concentrado Poder Limón",
+                format: "750ml",
+                price: 2290,
+                oldPrice: null,
+                category: "aseo",
+                img: "https://images.unsplash.com/photo-1585421514738-01798e348b17?q=80&w=700&auto=format&fit=crop",
+                rating: 4.9,
+                description: "Fórmula concentrada con acción desengrasante ultra rápida y fresco aroma a limón natural. Rinde el doble en tu cocina."
+            },
+            {
+                id: 37,
+                brand: "Nova",
+                name: "Toalla Nova Clásica Ultra Absorbente",
+                format: "2 Rollos",
+                price: 1690,
+                oldPrice: null,
+                category: "aseo",
+                img: "https://images.unsplash.com/photo-1607613009820-a29f7bb81c04?q=80&w=700&auto=format&fit=crop",
+                rating: 4.8,
+                description: "Toallas de papel absorbentes y resistentes para limpiar derrames, secar alimentos y mantener la cocina impecable."
+            },
+            {
+                id: 38,
+                brand: "Omo",
+                name: "Detergente Líquido Omo Matic Activo",
+                format: "1.2 Litros",
+                price: 5490,
+                oldPrice: 6290,
+                category: "aseo",
+                img: "https://images.unsplash.com/photo-1610557892470-55d9e80c0bce?q=80&w=700&auto=format&fit=crop",
+                badge: "OFERTA",
+                isOffer: true,
+                rating: 4.9,
+                description: "Limpieza profunda con remoción de manchas difíciles desde el primer lavado. Fragancia fresca y cuidado de fibras."
+            },
+
+            // Cervezas y Licores (Sección de Conveniencia)
+            {
+                id: 39,
+                brand: "Corona Extra",
+                name: "Cerveza Rubia Corona Extra Botella",
+                format: "Pack 6 x 355cc",
+                price: 6990,
+                oldPrice: 7990,
+                category: "licores",
+                img: "https://images.unsplash.com/photo-1608270586620-248524c67de9?q=80&w=700&auto=format&fit=crop",
+                badge: "OFERTA",
+                isOffer: true,
+                rating: 4.9,
+                description: "Cerveza mexicana clásica, ligera y suave con notas de malta y lúpulo fino. Ideal para servir bien fría con rodaja de limón."
+            },
+            {
+                id: 40,
+                brand: "Royal Guard",
+                name: "Cerveza Royal Guard Doble Lúpulo Lata",
+                format: "Pack 6 x 470cc",
+                price: 6490,
+                oldPrice: null,
+                category: "licores",
+                img: "https://images.unsplash.com/photo-1558001373-7b93ee48ffa0?q=80&w=700&auto=format&fit=crop",
+                rating: 4.8,
+                description: "Cerveza premium chilena con doble adición de lúpulo aromático, color ámbar brillante y espuma consistente."
+            },
+            {
+                id: 41,
+                brand: "Alto del Carmen",
+                name: "Pisco Especial 35° Añejado en Roble",
+                format: "750cc",
+                price: 6990,
+                oldPrice: 7990,
+                category: "licores",
+                img: "https://images.unsplash.com/photo-1568213816046-0ee1c42bd559?q=80&w=700&auto=format&fit=crop",
+                badge: "OFERTA",
+                isOffer: true,
+                rating: 4.9,
+                description: "Elaborado con uvas moscatel cosechadas en el Valle del Huasco y reposado en barricas de roble. Clásico indiscutido."
+            },
+            {
+                id: 42,
+                brand: "Concha y Toro",
+                name: "Vino Casillero del Diablo Cabernet Sauvignon",
+                format: "750cc",
+                price: 5490,
+                oldPrice: 6290,
+                category: "licores",
+                img: "https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?q=80&w=700&auto=format&fit=crop",
+                badge: "OFERTA",
+                isOffer: true,
+                rating: 4.8,
+                description: "Vino tinto reserva chileno con cuerpo medio-alto, taninos redondos, intensos aromas a ciruela y sutiles notas a roble y café."
+            }
+        ];
+
+        // Productos de Venta Mayorista para Almacenes y Familias
+        const WHOLESALE_ITEMS = [
+            {
+                name: "Caja Aceite Belmont Maravilla 900ml",
+                format: "12 Botellas x 900ml",
+                moq: "Mínimo 1 caja",
+                price: 25900,
+                priceUnit: "caja",
+                highlight: "Alta Rotación"
+            },
+            {
+                name: "Fardo Bebida Coca-Cola Original 2.5L",
+                format: "6 Botellas x 2.5 Litros",
+                moq: "Mínimo 2 fardos",
+                price: 14490,
+                priceUnit: "fardo",
+                highlight: "Precio Gremio"
+            },
+            {
+                name: "Fardo Azúcar Blanca Granulada Iansa 1kg",
+                format: "10 Paquetes x 1 Kilo",
+                moq: "Mínimo 1 fardo",
+                price: 12900,
+                priceUnit: "fardo",
+                highlight: "Despensa Negocio"
+            },
+            {
+                name: "Caja Cerveza Corona Extra 355cc",
+                format: "24 Botellas x 355cc",
+                moq: "Mínimo 1 caja",
+                price: 22900,
+                priceUnit: "caja",
+                highlight: "Eventos & Asados"
+            }
+        ];
+
+        // Feed de Instagram (Grid 3x3 de 9 publicaciones reales y preparadas)
+        const INSTAGRAM_POSTS = [
+            {
+                id: 1,
+                caption: "¡Llegó reposición de pan de molde fresco, cecinas recién laminadas y lácteos del día! Desayuno y once listos en Padre Las Casas.",
+                tag: "#MinimarketAtr",
+                likes: "154",
+                comments: "18",
+                postUrl: "https://www.instagram.com/minimarketatr/",
+                img: "https://images.unsplash.com/photo-1509440159596-0249088772ff?q=80&w=700&auto=format&fit=crop"
+            },
+            {
+                id: 2,
+                caption: "Bebidas Coca-Cola, Sprite y aguas bien heladas en nuestra vitrina refrigerada. Pide por WhatsApp y te lo llevamos.",
+                tag: "#BebidasHeladas",
+                likes: "215",
+                comments: "24",
+                postUrl: "https://www.instagram.com/minimarketatr/",
+                img: "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?q=80&w=700&auto=format&fit=crop"
+            },
+            {
+                id: 3,
+                caption: "Despensa completa con los mejores precios: arroz Tucapel, fideos Carozzi, aceites y salsas a precio de barrio.",
+                tag: "#AbarrotesAtr",
+                likes: "189",
+                comments: "14",
+                postUrl: "https://www.instagram.com/minimarketatr/",
+                img: "https://images.unsplash.com/photo-1586201375761-83865001e31c?q=80&w=700&auto=format&fit=crop"
+            },
+            {
+                id: 4,
+                caption: "Lácteos Colun frescos y huevos de campo colorados recién llegados. Calidad garantizada para tu familia.",
+                tag: "#LacteosSur",
+                likes: "304",
+                comments: "31",
+                postUrl: "https://www.instagram.com/minimarketatr/",
+                img: "https://images.unsplash.com/photo-1582722872445-44dc5f7e3c8f?q=80&w=700&auto=format&fit=crop"
+            },
+            {
+                id: 5,
+                caption: "Para el antojito de la tarde: papas fritas Lay's, Doritos, Ramitas y chocolates Sahne-Nuss siempre disponibles.",
+                tag: "#SnacksAtr",
+                likes: "176",
+                comments: "15",
+                postUrl: "https://www.instagram.com/minimarketatr/",
+                img: "https://images.unsplash.com/photo-1566478989037-eec170784d0b?q=80&w=700&auto=format&fit=crop"
+            },
+            {
+                id: 6,
+                caption: "Atención almacenes y familias: fardos de azúcar, aceite y bebidas a precio distribuidor con entrega rápida.",
+                tag: "#MayoristaAtr",
+                likes: "260",
+                comments: "42",
+                postUrl: "https://www.instagram.com/minimarketatr/",
+                img: "https://images.unsplash.com/photo-1578916171728-46686eac8d58?q=80&w=700&auto=format&fit=crop"
+            },
+            {
+                id: 7,
+                caption: "Hielo en bolsa purificado y carbón listos para tu asado del fin de semana. No te quedes sin stock.",
+                tag: "#AsadoFamiliar",
+                likes: "198",
+                comments: "22",
+                postUrl: "https://www.instagram.com/minimarketatr/",
+                img: "https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?q=80&w=700&auto=format&fit=crop"
+            },
+            {
+                id: 8,
+                caption: "Sección de aseo y cuidado del hogar: detergentes Omo, papel higiénico Elite y Quix para tener tu casa impecable.",
+                tag: "#HogarLimpio",
+                likes: "245",
+                comments: "19",
+                postUrl: "https://www.instagram.com/minimarketatr/",
+                img: "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?q=80&w=700&auto=format&fit=crop"
+            },
+            {
+                id: 9,
+                caption: "Cervezas Corona y Royal Guard bien heladas para compartir después del trabajo. Despacho rápido a domicilio.",
+                tag: "#CervezaHelada",
+                likes: "312",
+                comments: "38",
+                postUrl: "https://www.instagram.com/minimarketatr/",
+                img: "https://images.unsplash.com/photo-1608270586620-248524c67de9?q=80&w=700&auto=format&fit=crop"
+            }
+        ];
+
+        // Reseñas verificadas de clientes locales
+        const REVIEWS = [
+            {
+                author: "Marcela Soto",
+                sector: "Padre Las Casas Centro",
+                text: "Minimarket ATR siempre salva cuando falta algo para el almuerzo o la once. Pedí por WhatsApp y en menos de media hora ya lo tenía en mi puerta. Excelente surtido y amabilidad.",
+                rating: 5,
+                date: "Hace 4 días"
+            },
+            {
+                author: "Carlos Navarrete",
+                sector: "Villa Alegre, PLC",
+                text: "Los mejores precios del sector. Tienen de todo: cecinas ricas, pan fresco, leche, bebidas heladas y las papas fritas para los niños. La atención por mensaje es súper rápida y clara.",
+                rating: 5,
+                date: "Hace 1 semana"
+            },
+            {
+                author: "Raúl Cárdenas",
+                sector: "Comerciante Local",
+                text: "Compro fardos de bebidas y cajas de aceite para abastecer mi local de comida rápida. Siempre serios, puntuales y con boleta o factura al día. Un 7 el servicio.",
+                rating: 5,
+                date: "Hace 2 semanas"
+            }
+        ];
+
+        // Estado Reactivo de la Tienda
+        let cartState = JSON.parse(localStorage.getItem('atr_cart_v2')) || [];
+        let activeCategory = 'all';
+        let searchQuery = '';
+        let onlyOffers = false;
+        let sortBy = 'relevance';
+        let deliveryMethod = 'delivery';
+    </script>
+
+
+    <!-- ==========================================
+         A. BARRA INFORMATIVA SUPERIOR (COMMERCE TICKER)
+    =========================================== -->
+    <aside class="bg-black text-neutral-200 border-b border-white/10 text-sm py-2.5 px-4 select-none relative z-50">
+        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2">
+            <!-- Mensaje Central / Beneficio -->
+            <div class="flex items-center gap-2 text-center sm:text-left font-medium">
+                <span class="inline-flex items-center justify-center bg-atr-red text-white text-xs font-black px-2.5 py-1 rounded uppercase tracking-wider">
+                    Despacho Express
+                </span>
+                <span class="text-xs sm:text-sm text-neutral-200">
+                    <strong>Minimarket en Padre Las Casas:</strong> Despacho gratis en compras sobre $35.000.
+                </span>
+            </div>
+
+            <!-- Datos Rápidos de Confianza -->
+            <div class="hidden sm:flex items-center gap-6 text-xs text-neutral-400 font-semibold">
+                <div class="flex items-center gap-1.5">
+                    <i class="ph-fill ph-clock text-amber-400"></i>
+                    <span>Lun a Dom: 09:30 a 00:00 hrs</span>
+                </div>
+                <div class="flex items-center gap-1.5">
+                    <i class="ph-fill ph-map-pin text-emerald-400"></i>
+                    <span>Mac Iver #1945, PLC</span>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+
+    <!-- ==========================================
+         B. HEADER COMERCIAL RETAIL (SECCIÓN NEGRA / CONTRASTE BLANCO)
+    =========================================== -->
+    <header class="sticky top-0 bg-black border-b border-white/10 z-40 transition-all shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20 gap-4 sm:gap-8">
+                
+                <!-- 1. IDENTIDAD DE MARCA: LOGO VECTORIAL BLANCO SOBRE FONDO NEGRO -->
+                <a href="#" class="flex items-center gap-3.5 group flex-shrink-0" aria-label="Minimarket A.T.R. Inicio">
+                    <img src="logo-white.svg" alt="Minimarket A.T.R." class="h-14 sm:h-16 w-auto object-contain select-none transition-transform group-hover:scale-105 flex-shrink-0">
+
+                    <div class="flex flex-col">
+                        <span class="font-sans text-3xl sm:text-4xl font-black tracking-tight text-white leading-none group-hover:text-amber-400 transition-colors">
+                            A.T.R.
+                        </span>
+                        <span class="text-xs sm:text-sm font-sans font-bold uppercase tracking-[0.22em] text-neutral-300 leading-tight mt-1">
+                            Minimarket & Abarrotes
+                        </span>
+                    </div>
+                </a>
+
+                <!-- 2. BUSCADOR INSTANTÁNEO EN TIEMPO REAL (ALTO CONTRASTE) -->
+                <div class="hidden md:flex flex-1 max-w-xl relative">
+                    <div class="relative w-full">
+                        <input 
+                            type="search" 
+                            id="globalSearchInput" 
+                            oninput="handleSearch(this.value)" 
+                            placeholder="Buscar arroz, leche, pan, bebidas, café, snacks..." 
+                            class="w-full bg-white/10 hover:bg-white/15 focus:bg-white/20 border border-white/20 focus:border-white text-white px-5 py-3 pl-12 pr-11 rounded-full font-sans text-base outline-none transition-all placeholder:text-neutral-400 focus:ring-2 focus:ring-white/20"
+                        >
+                        <i class="ph ph-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-neutral-300 text-xl pointer-events-none"></i>
+                        
+                        <button 
+                            id="clearSearchBtn" 
+                            onclick="clearSearchInput()" 
+                            class="hidden absolute right-3.5 top-1/2 -translate-y-1/2 text-neutral-300 hover:text-white p-0.5"
+                            aria-label="Borrar búsqueda"
+                        >
+                            <i class="ph ph-x-circle text-lg"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 3. ACCIONES DE COMPRA Y SERVICIO (BLANCO & CONTRASTE) -->
+                <div class="flex items-center gap-3 sm:gap-5 flex-shrink-0">
+                    <!-- WhatsApp Directo -->
+                    <button 
+                        onclick="openWhatsApp('Hola Minimarket A.T.R., quisiera coordinar una compra rápida.')"
+                        class="hidden lg:flex items-center gap-2.5 text-sm font-bold text-white bg-white/10 hover:bg-emerald-600 px-4 py-2.5 rounded-full border border-white/20 transition-all hover:border-emerald-500"
+                        aria-label="Consultar por WhatsApp"
+                    >
+                        <i class="ph-fill ph-whatsapp-logo text-emerald-400 text-base"></i>
+                        <span>Pedido Directo</span>
+                    </button>
+
+                    <!-- Carrito Drawer Trigger -->
+                    <button 
+                        onclick="toggleCart(true)" 
+                        class="relative bg-white hover:bg-neutral-100 text-neutral-950 p-2.5 sm:px-5 sm:py-3 rounded-full flex items-center gap-2.5 shadow-sm transition-all active:scale-95 group font-extrabold text-sm sm:text-base"
+                        aria-label="Abrir Carrito"
+                    >
+                        <i class="ph-bold ph-shopping-bag text-xl text-neutral-950"></i>
+                        <span class="hidden sm:inline text-sm sm:text-base font-extrabold font-sans text-neutral-950">Canasta</span>
+                        
+                        <!-- Contador flotante -->
+                        <span 
+                            id="cartCountBadge" 
+                            class="absolute -top-1 -right-1 bg-atr-red text-white text-xs font-black h-6 w-6 rounded-full flex items-center justify-center border-2 border-black shadow transition-transform scale-0"
+                        >
+                            0
+                        </span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- 4. NAVEGACIÓN PRINCIPAL HORIZONTAL (DESKTOP) -->
+            <nav class="hidden md:flex items-center justify-between border-t border-white/10 py-2.5 overflow-x-auto no-scrollbar gap-2">
+                <div class="flex items-center space-x-1 sm:space-x-2" id="navCategoryChips">
+                    <!-- Renderizado dinámicamente vía JS con contraste blanco sobre negro -->
+                </div>
+
+                <div class="flex items-center gap-3 pl-4 border-l border-white/15">
+                    <button 
+                        onclick="filterOffersOnly()" 
+                        class="text-sm font-bold text-white bg-red-600 hover:bg-red-500 flex items-center gap-2 px-4 py-2 rounded-full transition-colors shadow-sm"
+                    >
+                        <i class="ph-fill ph-fire text-amber-300"></i> Ofertas Especiales
+                    </button>
+                    <a 
+                        href="#mayorista" 
+                        class="text-sm font-bold text-neutral-200 hover:text-white flex items-center gap-1.5 px-4 py-2 rounded-full hover:bg-white/10 transition-colors border border-white/15"
+                    >
+                        <i class="ph ph-buildings text-amber-400"></i> Mayorista
+                    </a>
+                </div>
+            </nav>
+        </div>
+
+        <!-- Barra de Búsqueda Móvil Integrada -->
+        <div class="md:hidden px-4 pb-3 pt-1 bg-black">
+            <div class="relative w-full">
+                <input 
+                    type="search" 
+                    id="mobileSearchInput" 
+                    oninput="handleSearch(this.value)" 
+                    placeholder="Buscar abarrotes, leche, pan, bebidas..." 
+                    class="w-full bg-white/10 focus:bg-white/20 border border-white/20 focus:border-white text-white px-4 py-2 pl-10 rounded-full font-sans text-sm outline-none transition-all placeholder:text-neutral-400"
+                >
+                <i class="ph ph-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-neutral-300 text-base pointer-events-none"></i>
+            </div>
+        </div>
+    </header>
+
+
+    <!-- ==========================================
+         C. HERO COMERCIAL COMPACTO Y CONVERTIDOR
+    =========================================== -->
+    <section class="bg-black text-white relative overflow-hidden border-b border-neutral-800">
+        <!-- Textura de fondo sutil con overlay de minimarket/tienda -->
+        <div class="absolute inset-0 opacity-20 mix-blend-luminosity pointer-events-none">
+            <img 
+                src="https://images.unsplash.com/photo-1578916171728-46686eac8d58?q=80&w=2000&auto=format&fit=crop" 
+                alt="Minimarket pasillo estanterías" 
+                class="w-full h-full object-cover"
+            >
+        </div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16 relative z-10">
+            <div class="grid lg:grid-cols-12 gap-8 items-center">
+                
+                <!-- Columna Izquierda: Mensaje y Acción -->
+                <div class="lg:col-span-7 space-y-4 text-center lg:text-left">
+                    <div class="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/15 px-4 py-1.5 rounded-full text-sm font-bold text-amber-300">
+                        <i class="ph-fill ph-seal-check text-amber-400"></i>
+                        <span>Minimarket Oficial en Padre Las Casas</span>
+                    </div>
+
+                    <h1 class="font-sans text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight text-white leading-[1.15] sm:leading-[1.12]">
+                        Todo para tu despensa, tu mesa y tus antojos al mejor precio local.
+                    </h1>
+
+                    <p class="font-sans text-neutral-200 text-base sm:text-lg lg:text-xl font-normal max-w-2xl mx-auto lg:mx-0 leading-relaxed">
+                        Abastece tu hogar todos los días con primeras marcas: abarrotes, lácteos del día, panadería fresca, cecinas, bebidas frías, snacks, congelados, aseo y licores seleccionados con despacho express en Padre Las Casas y Temuco.
+                    </p>
+
+                    <!-- CTAs principales -->
+                    <div class="pt-2 flex flex-wrap items-center justify-center lg:justify-start gap-3 sm:gap-4">
+                        <a 
+                            href="#catalogo" 
+                            class="w-full sm:w-auto text-center justify-center bg-white hover:bg-neutral-100 text-atr-base font-sans font-black text-base sm:text-lg px-7 py-3.5 rounded-xl shadow-sm hover:shadow transition-all flex items-center gap-2.5 group"
+                        >
+                            <span>Comprar en el Catálogo</span>
+                            <i class="ph-bold ph-arrow-down group-hover:translate-y-0.5 transition-transform"></i>
+                        </a>
+
+                        <button 
+                            onclick="filterOffersOnly()" 
+                            class="w-full sm:w-auto text-center justify-center bg-atr-red hover:bg-red-700 text-white font-sans font-black text-base sm:text-lg px-6 py-3.5 rounded-xl border border-red-500/30 transition-all flex items-center gap-2.5"
+                        >
+                            <i class="ph-fill ph-fire text-amber-300"></i>
+                            <span>Ver Ofertas de la Semana</span>
+                        </button>
+                    </div>
+
+                    <!-- Micro-garantías comerciales -->
+                    <div class="pt-5 grid grid-cols-3 gap-3 border-t border-white/10 text-neutral-200 text-sm sm:text-base font-semibold">
+                        <div class="flex items-center gap-1.5 justify-center lg:justify-start">
+                            <i class="ph ph-truck text-emerald-400 text-base"></i>
+                            <span>Despacho Rápido</span>
+                        </div>
+                        <div class="flex items-center gap-1.5 justify-center lg:justify-start">
+                            <i class="ph ph-shield-check text-emerald-400 text-base"></i>
+                            <span>Productos Frescos</span>
+                        </div>
+                        <div class="flex items-center gap-1.5 justify-center lg:justify-start">
+                            <i class="ph ph-storefront text-emerald-400 text-base"></i>
+                            <span>Retiro en Local</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Columna Derecha: Tarjeta Destacada Promocional -->
+                <div class="lg:col-span-5 hidden lg:block">
+                    <div class="bg-gradient-to-b from-white/10 to-white/5 backdrop-blur-md border border-white/15 rounded-2xl p-6 text-white shadow-card relative">
+                        <div class="flex justify-between items-center mb-4">
+                            <span class="text-sm font-extrabold uppercase tracking-wider text-amber-400 flex items-center gap-1.5">
+                                <i class="ph-fill ph-sparkle"></i> Destacado del Día
+                            </span>
+                            <span class="bg-atr-red text-white text-xs font-black px-2.5 py-1 rounded">
+                                -14% DSCTO
+                            </span>
+                        </div>
+
+                        <div class="flex items-center gap-5">
+                            <div class="w-28 h-36 bg-white/10 rounded-xl p-2 flex items-center justify-center flex-shrink-0">
+                                <img 
+                                    src="https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?q=80&w=400&auto=format&fit=crop" 
+                                    alt="Aceite Puro Belmont" 
+                                    class="max-h-full w-auto object-contain drop-shadow-md"
+                                >
+                            </div>
+                            <div class="space-y-1">
+                                <span class="text-xs font-bold text-neutral-400 tracking-wider uppercase">Belmont</span>
+                                <h3 class="font-sans text-2xl font-black text-white leading-tight">Aceite Puro Maravilla</h3>
+                                <p class="text-sm text-neutral-300 font-medium">Formato 900ml • 100% Maravilla</p>
+                                <div class="pt-2 flex items-baseline gap-2">
+                                    <span class="text-3xl font-black text-white">$2.490</span>
+                                    <span class="text-sm text-neutral-400 line-through">$2.890</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-5 pt-4 border-t border-white/10 flex items-center justify-between gap-3">
+                            <span class="text-xs text-emerald-400 font-medium flex items-center gap-1">
+                                <i class="ph-fill ph-check-circle"></i> Stock para entrega hoy
+                            </span>
+                            <button 
+                                onclick="quickAddToCart(1)" 
+                                class="bg-amber-500 hover:bg-amber-400 text-neutral-950 text-sm font-black px-5 py-2.5 rounded-xl transition-colors flex items-center gap-2"
+                            >
+                                <i class="ph-bold ph-plus"></i> Agregar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+
+    <!-- ==========================================
+         D. BARRA DE CATEGORÍAS VISUALES CON MINIATURAS
+    =========================================== -->
+    <section class="bg-white border-b border-neutral-200 py-6">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between mb-4">
+                <h2 class="text-base font-extrabold uppercase tracking-wider text-neutral-600">
+                    Explora por Categoría
+                </h2>
+                <span class="text-sm text-neutral-400 font-medium">Selecciona para filtrar rápido</span>
+            </div>
+
+            <!-- Chips de Categorías Gráficos -->
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3">
+                <button 
+                    onclick="setCategory('despensa')" 
+                    class="category-card p-3 rounded-xl border border-neutral-200 hover:border-atr-base hover:bg-neutral-50 transition-all text-left flex items-center gap-3 group"
+                >
+                    <div class="w-10 h-10 rounded-lg bg-amber-50 text-amber-700 flex items-center justify-center text-xl group-hover:scale-110 transition-transform">
+                        <i class="ph-fill ph-shopping-bag-open"></i>
+                    </div>
+                    <div>
+                        <span class="block text-sm sm:text-base font-black text-neutral-950 leading-tight">Abarrotes</span>
+                        <span class="text-xs sm:text-sm text-neutral-500 font-medium">Arroz, Aceite, Café</span>
+                    </div>
+                </button>
+
+                <button 
+                    onclick="setCategory('lacteos')" 
+                    class="category-card p-3 rounded-xl border border-neutral-200 hover:border-atr-base hover:bg-neutral-50 transition-all text-left flex items-center gap-3 group"
+                >
+                    <div class="w-10 h-10 rounded-lg bg-blue-50 text-blue-700 flex items-center justify-center text-xl group-hover:scale-110 transition-transform">
+                        <i class="ph-fill ph-egg"></i>
+                    </div>
+                    <div>
+                        <span class="block text-sm sm:text-base font-black text-neutral-950 leading-tight">Lácteos</span>
+                        <span class="text-xs sm:text-sm text-neutral-500 font-medium">Leche, Huevos, Quesos</span>
+                    </div>
+                </button>
+
+                <button 
+                    onclick="setCategory('bebidas')" 
+                    class="category-card p-3 rounded-xl border border-neutral-200 hover:border-atr-base hover:bg-neutral-50 transition-all text-left flex items-center gap-3 group"
+                >
+                    <div class="w-10 h-10 rounded-lg bg-emerald-50 text-emerald-700 flex items-center justify-center text-xl group-hover:scale-110 transition-transform">
+                        <i class="ph-fill ph-drop"></i>
+                    </div>
+                    <div>
+                        <span class="block text-sm sm:text-base font-black text-neutral-950 leading-tight">Bebidas</span>
+                        <span class="text-xs sm:text-sm text-neutral-500 font-medium">Gaseosas & Jugos</span>
+                    </div>
+                </button>
+
+                <button 
+                    onclick="setCategory('panaderia')" 
+                    class="category-card p-3 rounded-xl border border-neutral-200 hover:border-atr-base hover:bg-neutral-50 transition-all text-left flex items-center gap-3 group"
+                >
+                    <div class="w-10 h-10 rounded-lg bg-orange-50 text-orange-700 flex items-center justify-center text-xl group-hover:scale-110 transition-transform">
+                        <i class="ph-fill ph-bread"></i>
+                    </div>
+                    <div>
+                        <span class="block text-sm sm:text-base font-black text-neutral-950 leading-tight">Pan & Cecinas</span>
+                        <span class="text-xs sm:text-sm text-neutral-500 font-medium">Jamón, Vienesas, Pan</span>
+                    </div>
+                </button>
+
+                <button 
+                    onclick="setCategory('snacks')" 
+                    class="category-card p-3 rounded-xl border border-neutral-200 hover:border-atr-base hover:bg-neutral-50 transition-all text-left flex items-center gap-3 group"
+                >
+                    <div class="w-10 h-10 rounded-lg bg-rose-50 text-rose-800 flex items-center justify-center text-xl group-hover:scale-110 transition-transform">
+                        <i class="ph-fill ph-cookie"></i>
+                    </div>
+                    <div>
+                        <span class="block text-sm sm:text-base font-black text-neutral-950 leading-tight">Snacks</span>
+                        <span class="text-xs sm:text-sm text-neutral-500 font-medium">Papas, Dulces, Galletas</span>
+                    </div>
+                </button>
+
+                <button 
+                    onclick="setCategory('licores')" 
+                    class="category-card p-3 rounded-xl border border-neutral-200 hover:border-atr-base hover:bg-neutral-50 transition-all text-left flex items-center gap-3 group"
+                >
+                    <div class="w-10 h-10 rounded-lg bg-yellow-50 text-yellow-700 flex items-center justify-center text-xl group-hover:scale-110 transition-transform">
+                        <i class="ph-fill ph-beer-bottle"></i>
+                    </div>
+                    <div>
+                        <span class="block text-sm sm:text-base font-black text-neutral-950 leading-tight">Cervezas</span>
+                        <span class="text-xs sm:text-sm text-neutral-500 font-medium">Packs & Licores</span>
+                    </div>
+                </button>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- ==========================================
+         E. SECCIÓN DE OFERTAS FLASH DESTACADAS
+    =========================================== -->
+    <section id="ofertas-section" class="py-10 bg-gradient-to-b from-white to-neutral-50 border-b border-neutral-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col sm:flex-row sm:items-end justify-between mb-6 gap-3">
+                <div>
+                    <div class="flex items-center gap-2 text-atr-red text-sm font-black uppercase tracking-wider mb-1">
+                        <i class="ph-fill ph-lightning animate-pulse-subtle"></i>
+                        <span>Precios Especiales de Temporada</span>
+                    </div>
+                    <h2 class="font-sans text-3xl sm:text-4xl font-black text-neutral-950">
+                        Ofertas Destacadas de la Semana
+                    </h2>
+                </div>
+                <button 
+                    onclick="filterOffersOnly()" 
+                    class="text-sm sm:text-base font-black text-atr-red hover:text-atr-redHover flex items-center gap-1.5 border-b-2 border-red-200 pb-0.5 self-start sm:self-auto"
+                >
+                    <span>Ver todas las ofertas en el catálogo</span>
+                    <i class="ph ph-arrow-right"></i>
+                </button>
+            </div>
+
+            <!-- Carrusel / Grid de Ofertas -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-6" id="flashDealsGrid">
+                <!-- Se inyectan dinámicamente con JS -->
+            </div>
+        </div>
+    </section>
+
+
+    <!-- ==========================================
+         F. CATÁLOGO COMERCIAL COMPLETO Y FILTROS INTERACTIVOS
+    =========================================== -->
+    <section id="catalogo" class="py-12 bg-neutral-50 flex-grow">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <div class="flex flex-col lg:flex-row gap-8 items-start">
+                
+                <!-- 1. SIDEBAR DE FILTROS (DESKTOP) -->
+                <aside class="hidden lg:block w-64 flex-shrink-0 sticky top-28 bg-white border border-neutral-200 rounded-2xl p-5 shadow-card">
+                    <div class="flex items-center justify-between pb-4 border-b border-neutral-100 mb-5">
+                        <h3 class="font-black text-base text-neutral-950 flex items-center gap-2">
+                            <i class="ph ph-faders text-neutral-700"></i> Filtros de Compra
+                        </h3>
+                        <button onclick="resetAllFilters()" class="text-xs sm:text-sm font-bold text-atr-wine hover:underline">
+                            Limpiar todo
+                        </button>
+                    </div>
+
+                    <!-- Filtro Categoría -->
+                    <div class="space-y-3 mb-6">
+                        <label class="block text-xs sm:text-sm font-black text-neutral-500 uppercase tracking-wider">
+                            Categorías
+                        </label>
+                        <div class="space-y-1" id="sidebarCategoryList">
+                            <!-- Inyectado dinámicamente -->
+                        </div>
+                    </div>
+
+                    <!-- Filtro Ofertas -->
+                    <div class="pt-4 border-t border-neutral-100 mb-6">
+                        <label class="block text-xs sm:text-sm font-black text-neutral-500 uppercase tracking-wider mb-2">
+                            Promociones
+                        </label>
+                        <label class="flex items-center gap-2.5 cursor-pointer text-sm font-bold text-neutral-800 hover:text-atr-red select-none">
+                            <input 
+                                type="checkbox" 
+                                id="sidebarOnlyOffersCheckbox" 
+                                onchange="toggleOffersFilter(this.checked)"
+                                class="w-4 h-4 rounded border-neutral-300 text-atr-red focus:ring-red-400 cursor-pointer"
+                            >
+                            <span>Solo Productos con Descuento</span>
+                        </label>
+                    </div>
+
+                    <!-- Rango de Precios -->
+                    <div class="pt-4 border-t border-neutral-100">
+                        <div class="flex justify-between items-center mb-2">
+                            <label class="text-xs font-bold text-neutral-500 uppercase tracking-wider">
+                                Precio Máximo
+                            </label>
+                            <span id="priceRangeDisplay" class="text-base font-black text-neutral-950">$35.000</span>
+                        </div>
+                        <input 
+                            type="range" 
+                            id="priceRangeInput" 
+                            min="400" 
+                            max="35000" 
+                            step="500" 
+                            value="35000" 
+                            oninput="handlePriceRange(this.value)"
+                            class="w-full accent-neutral-900 cursor-pointer"
+                        >
+                        <div class="flex justify-between text-[10px] text-neutral-400 mt-1">
+                            <span>$400</span>
+                            <span>$35.000+</span>
+                        </div>
+                    </div>
+
+                    <!-- Garantía Comercio -->
+                    <div class="mt-6 pt-4 border-t border-neutral-100 text-[11px] text-neutral-500 space-y-2">
+                        <p class="flex items-center gap-1.5 font-medium text-neutral-700">
+                            <i class="ph ph-seal-check text-emerald-500 text-sm"></i>
+                            Productos frescos y garantizados.
+                        </p>
+                        <p class="flex items-center gap-1.5">
+                            <i class="ph ph-map-pin text-neutral-400"></i>
+                            Mac Iver #1945, Padre Las Casas
+                        </p>
+                    </div>
+                </aside>
+
+
+                <!-- 2. ÁREA PRINCIPAL DEL CATÁLOGO -->
+                <div class="flex-1 w-full">
+                    
+                    <!-- Barra de Herramientas y Ordenamiento -->
+                    <div class="bg-white border border-neutral-200 rounded-xl p-3.5 sm:p-4 mb-6 shadow-subtle flex flex-wrap items-center justify-between gap-3">
+                        <div class="flex items-center gap-2">
+                            <span class="text-base sm:text-lg font-medium text-neutral-700">
+                                Mostrando <strong id="visibleProductsCount" class="text-neutral-950 text-lg sm:text-xl font-black">0</strong> productos
+                            </span>
+                            <span id="activeFilterBadge" class="hidden text-[11px] bg-neutral-100 text-neutral-700 px-2 py-0.5 rounded-full font-medium"></span>
+                        </div>
+
+                        <!-- Filtro Móvil Toggle & Ordenar -->
+                        <div class="flex items-center gap-2 w-full sm:w-auto justify-between sm:justify-end">
+                            <!-- Botón modal filtros en móvil -->
+                            <button 
+                                onclick="toggleMobileFilters()" 
+                                class="lg:hidden text-sm font-extrabold text-neutral-800 bg-neutral-100 hover:bg-neutral-200 px-4 py-2.5 rounded-xl flex items-center gap-2"
+                            >
+                                <i class="ph ph-faders"></i>
+                                <span>Filtros</span>
+                            </button>
+
+                            <!-- Selector Ordenar -->
+                            <div class="flex items-center gap-2">
+                                <label for="sortSelector" class="text-sm text-neutral-600 font-bold whitespace-nowrap hidden sm:inline">Ordenar:</label>
+                                <select 
+                                    id="sortSelector" 
+                                    onchange="handleSortChange(this.value)"
+                                    class="bg-neutral-50 hover:bg-neutral-100 border border-neutral-200 text-neutral-950 text-sm font-extrabold py-2.5 px-4 rounded-xl outline-none cursor-pointer focus:ring-2 focus:ring-neutral-900"
+                                >
+                                    <option value="relevance">Relevancia</option>
+                                    <option value="price-asc">Menor precio</option>
+                                    <option value="price-desc">Mayor precio</option>
+                                    <option value="discount">Mayor descuento</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tags de Filtros Activos -->
+                    <div id="activeFilterTagsContainer" class="hidden flex flex-wrap gap-2 mb-4">
+                        <!-- Chips inyectados con JS -->
+                    </div>
+
+                    <!-- GRID PRINCIPAL DE PRODUCTOS -->
+                    <div id="catalogGrid" class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-5">
+                        <!-- Renderizado dinámicamente con JS -->
+                    </div>
+
+                    <!-- ESTADO VACÍO CUANDO NO HAY RESULTADOS -->
+                    <div id="noResultsState" class="hidden bg-white border border-neutral-200 rounded-2xl p-12 text-center my-6">
+                        <div class="w-16 h-16 bg-neutral-100 text-neutral-400 rounded-full flex items-center justify-center text-3xl mx-auto mb-4">
+                            <i class="ph ph-magnifying-glass"></i>
+                        </div>
+                        <h3 class="font-sans text-2xl font-bold text-neutral-900 mb-2">
+                            No encontramos productos para tu búsqueda
+                        </h3>
+                        <p class="text-sm text-neutral-500 max-w-md mx-auto mb-6">
+                            Intenta cambiar los términos, eliminar filtros de precio o revisar otra categoría del minimarket.
+                        </p>
+                        <button 
+                            onclick="resetAllFilters()" 
+                            class="bg-atr-base hover:bg-neutral-800 text-white font-sans font-bold text-xs px-6 py-2.5 rounded-lg transition-colors"
+                        >
+                            Ver Todo el Catálogo
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- ==========================================
+         G. VENTA POR MAYOR (ALMACENES / NEGOCIOS / FAMILIAS)
+    =========================================== -->
+    <section id="mayorista" class="py-16 bg-atr-base text-white border-t border-neutral-800 relative overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            
+            <div class="max-w-3xl mb-10">
+                <span class="inline-block bg-amber-500 text-neutral-950 text-xs font-black uppercase tracking-widest px-3 py-1.5 rounded mb-3">
+                    División Comercial & Abastecimiento
+                </span>
+                <h2 class="font-sans text-3xl sm:text-5xl font-black text-white mb-4 leading-tight">
+                    Precios Especiales en Fardos y Cajas Cerradas
+                </h2>
+                <p class="font-sans text-neutral-200 text-base sm:text-lg leading-relaxed">
+                    Si tienes un almacén, negocio de comida rápida o necesitas comprar por volumen para tu hogar o evento en la Araucanía, accede a precios preferenciales en fardos y cajas selladas.
+                </p>
+            </div>
+
+            <!-- Grilla de Ofertas Mayoristas -->
+            <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5" id="wholesaleGrid">
+                <!-- Se inyecta dinámicamente con JS -->
+            </div>
+
+            <!-- Banner Informativo de Cotización Directa -->
+            <div class="mt-8 bg-neutral-800/80 border border-neutral-700 rounded-xl p-6 flex flex-col md:flex-row items-center justify-between gap-4">
+                <div class="space-y-1 text-center md:text-left">
+                    <h4 class="font-black text-white text-lg sm:text-xl">¿Necesitas una cotización por volumen para tu negocio o evento?</h4>
+                    <p class="text-sm text-neutral-300">Te enviamos el listado de precios mayoristas vigente directamente a tu WhatsApp.</p>
+                </div>
+                <button 
+                    onclick="openWhatsApp('Hola Minimarket A.T.R., quisiera solicitar la lista de precios mayoristas en abarrotes y bebidas.')"
+                    class="bg-emerald-500 hover:bg-emerald-400 text-neutral-950 font-black text-sm sm:text-base px-6 py-3.5 rounded-xl flex items-center gap-2.5 whitespace-nowrap transition-colors shadow-sm"
+                >
+                    <i class="ph-fill ph-whatsapp-logo text-base"></i>
+                    <span>Solicitar Lista Mayorista</span>
+                </button>
+            </div>
+
+        </div>
+    </section>
+
+
+    <!-- ==========================================
+         H. RESEÑAS VERIFICADAS DE CLIENTES LOCALES
+    =========================================== -->
+    <section class="py-14 bg-white border-b border-neutral-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-xl mx-auto mb-10">
+                <div class="flex items-center justify-center gap-1 text-amber-400 text-lg mb-2">
+                    <i class="ph-fill ph-star"></i>
+                    <i class="ph-fill ph-star"></i>
+                    <i class="ph-fill ph-star"></i>
+                    <i class="ph-fill ph-star"></i>
+                    <i class="ph-fill ph-star"></i>
+                </div>
+                <h2 class="font-sans text-3xl sm:text-4xl font-black text-neutral-950">
+                    La Confianza de Nuestros Vecinos y Clientes
+                </h2>
+                <p class="text-sm sm:text-base text-neutral-500 mt-1 font-medium">
+                    Atención cercana, productos frescos y rapidez comprobada en Padre Las Casas y Temuco.
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-6" id="reviewsGrid">
+                <!-- Inyectado dinámicamente con JS -->
+            </div>
+        </div>
+    </section>
+
+
+    <!-- ==========================================
+         I. FEED DE INSTAGRAM (GRID 3X3)
+    =========================================== -->
+    <section class="py-16 bg-neutral-50 border-b border-neutral-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col sm:flex-row items-start sm:items-end justify-between mb-8 gap-4">
+                <div>
+                    <span class="text-xs sm:text-sm font-extrabold text-atr-amber uppercase tracking-wider block mb-1">
+                        Comunidad en Redes
+                    </span>
+                    <h2 class="font-sans text-3xl sm:text-4xl font-black text-neutral-950">
+                        Síguenos en Instagram
+                    </h2>
+                    <p class="text-sm sm:text-base text-neutral-500 mt-1 font-medium">
+                        Novedades, ofertas semanales y reposiciones del día en Padre Las Casas.
+                    </p>
+                </div>
+                <a 
+                    href="https://www.instagram.com/minimarketatr/" 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    class="text-sm sm:text-base font-black text-neutral-950 hover:text-atr-wine flex items-center gap-2 bg-white border border-neutral-200 px-6 py-3 rounded-full shadow-subtle hover:bg-neutral-50 transition-all group flex-shrink-0"
+                >
+                    <i class="ph-fill ph-instagram-logo text-xl text-pink-600 group-hover:scale-110 transition-transform"></i>
+                    <span>@minimarketatr</span>
+                    <i class="ph-bold ph-arrow-up-right text-xs text-neutral-400 group-hover:text-neutral-950 transition-colors"></i>
+                </a>
+            </div>
+
+            <!-- Grilla 3x3 Perfectamente Alineada al Ancho Global (max-w-7xl) -->
+            <div class="grid grid-cols-3 gap-2.5 sm:gap-5 lg:gap-6" id="instagramGrid">
+                <!-- Inyectado vía JS (9 posts en matriz 3x3) -->
+            </div>
+        </div>
+    </section>
+
+
+    <!-- ==========================================
+         J. UBICACIÓN, MAPA REAL Y CONTACTO
+    =========================================== -->
+    <section id="ubicacion" class="py-14 bg-white border-b border-neutral-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid lg:grid-cols-12 gap-8 items-center">
+                
+                <!-- Datos de Ubicación y Horarios -->
+                <div class="lg:col-span-5 space-y-5">
+                    <div>
+                        <span class="text-xs font-bold text-atr-amber uppercase tracking-wider block mb-1">
+                            Punto de Venta y Retiro
+                        </span>
+                        <h2 class="font-sans text-3xl sm:text-4xl font-black text-neutral-950 leading-tight">
+                            Ven a Nuestro Local en Padre Las Casas
+                        </h2>
+                    </div>
+
+                    <div class="space-y-5 text-base text-neutral-700">
+                        <div class="flex items-start gap-3">
+                            <div class="w-9 h-9 rounded-lg bg-neutral-100 text-neutral-800 flex items-center justify-center flex-shrink-0 mt-0.5">
+                                <i class="ph-fill ph-map-pin text-lg text-atr-wine"></i>
+                            </div>
+                            <div>
+                                <strong class="block text-neutral-900 font-semibold">Dirección Comercial</strong>
+                                <span>Mac Iver #1945, Padre Las Casas, Chile</span>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start gap-3">
+                            <div class="w-9 h-9 rounded-lg bg-neutral-100 text-neutral-800 flex items-center justify-center flex-shrink-0 mt-0.5">
+                                <i class="ph-fill ph-clock text-lg text-amber-600"></i>
+                            </div>
+                            <div>
+                                <strong class="block text-neutral-900 font-semibold">Horario de Atención</strong>
+                                <span>Lunes a Domingo: 09:30 a 00:00 hrs continuado</span>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start gap-3">
+                            <div class="w-9 h-9 rounded-lg bg-neutral-100 text-neutral-800 flex items-center justify-center flex-shrink-0 mt-0.5">
+                                <i class="ph-fill ph-moped text-lg text-emerald-600"></i>
+                            </div>
+                            <div>
+                                <strong class="block text-neutral-900 font-semibold">Zona de Despacho</strong>
+                                <span>Cobertura en Padre Las Casas y Temuco urbano</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="pt-2 flex flex-wrap gap-3">
+                        <a 
+                            href="https://maps.google.com/?q=Mac+Iver+1945,+Padre+Las+Casas,+Chile" 
+                            target="_blank" 
+                            rel="noopener noreferrer" 
+                            class="bg-atr-base hover:bg-neutral-800 text-white font-black text-sm px-6 py-3 rounded-xl flex items-center gap-2 transition-colors"
+                        >
+                            <i class="ph ph-navigation-arrow"></i>
+                            <span>Abrir en Google Maps</span>
+                        </a>
+
+                        <button 
+                            onclick="openWhatsApp('Hola Minimarket A.T.R., quisiera consultar cómo llegar al local de Mac Iver.')"
+                            class="bg-neutral-100 hover:bg-neutral-200 text-neutral-950 font-black text-sm px-5 py-3 rounded-xl flex items-center gap-2 transition-colors border border-neutral-200"
+                        >
+                            <i class="ph-fill ph-whatsapp-logo text-emerald-500"></i>
+                            <span>Preguntar por WhatsApp</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Mapa Embebido Real -->
+                <div class="lg:col-span-7 h-[340px] rounded-2xl overflow-hidden border border-neutral-200 shadow-card bg-neutral-100">
+                    <iframe 
+                        title="Mapa de Ubicación Minimarket A.T.R."
+                        src="https://maps.google.com/maps?q=Mac+Iver+1945,+Padre+Las+Casas,+Araucan%C3%ADa,+Chile&t=&z=15&ie=UTF8&iwloc=&output=embed"
+                        class="w-full h-full border-0" 
+                        loading="lazy" 
+                        referrerpolicy="no-referrer-when-downgrade"
+                    ></iframe>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+
+    <!-- ==========================================
+         K. FOOTER COMERCIAL COMPACTO Y ORDENADO
+    =========================================== -->
+    <footer class="bg-atr-base text-neutral-300 text-sm pt-14 pb-8 border-t border-neutral-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 pb-10 border-b border-neutral-800">
+                
+                <!-- Columna 1: Identidad -->
+                <div class="space-y-4">
+                    <div class="flex items-center gap-3">
+                        <img src="logo-white.svg" alt="Minimarket A.T.R." class="h-12 w-auto object-contain select-none flex-shrink-0">
+                        <div>
+                            <span class="font-sans text-3xl font-black text-white block leading-none">A.T.R.</span>
+                            <span class="text-xs font-bold text-atr-amber uppercase tracking-widest block mt-1">Minimarket</span>
+                        </div>
+                    </div>
+                    <p class="text-neutral-300 text-sm leading-relaxed">
+                        Tu minimarket y almacén de confianza en Padre Las Casas. Abarrotes, lácteos del día, pan fresco, cecinas, bebidas frías, snacks y aseo con atención cercana y rápida.
+                    </p>
+                    <div class="flex items-center gap-2 pt-1">
+                        <a href="https://www.instagram.com/minimarketatr/" target="_blank" rel="noopener noreferrer" class="w-9 h-9 rounded-full bg-neutral-800 text-neutral-300 hover:text-white hover:bg-neutral-700 flex items-center justify-center transition-colors" aria-label="Instagram">
+                            <i class="ph-fill ph-instagram-logo text-base"></i>
+                        </a>
+                        <button onclick="openWhatsApp('Hola Minimarket A.T.R.')" class="w-8 h-8 rounded-full bg-neutral-800 text-neutral-300 hover:text-emerald-400 hover:bg-neutral-700 flex items-center justify-center transition-colors" aria-label="WhatsApp">
+                            <i class="ph-fill ph-whatsapp-logo text-base"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Columna 2: Categorías Rápidas -->
+                <div>
+                    <h4 class="text-white font-black text-base mb-4">Catálogo Rápido</h4>
+                    <ul class="space-y-2">
+                        <li><button onclick="setCategory('despensa'); scrollToSection('catalogo');" class="hover:text-white transition-colors">Abarrotes & Despensa</button></li>
+                        <li><button onclick="setCategory('lacteos'); scrollToSection('catalogo');" class="hover:text-white transition-colors">Lácteos & Huevos</button></li>
+                        <li><button onclick="setCategory('bebidas'); scrollToSection('catalogo');" class="hover:text-white transition-colors">Bebidas & Jugos</button></li>
+                        <li><button onclick="setCategory('panaderia'); scrollToSection('catalogo');" class="hover:text-white transition-colors">Panadería & Cecinas</button></li>
+                        <li><button onclick="filterOffersOnly(); scrollToSection('catalogo');" class="text-atr-red hover:underline font-semibold">Ofertas de la Semana</button></li>
+                    </ul>
+                </div>
+
+                <!-- Columna 3: Información Comercial -->
+                <div>
+                    <h4 class="text-white font-black text-base mb-4">Servicios y Despacho</h4>
+                    <ul class="space-y-2">
+                        <li><span>Despacho a Padre Las Casas y Temuco</span></li>
+                        <li><span>Retiro directo en Mac Iver #1945</span></li>
+                        <li><span>Pago con Transferencia o Efectivo</span></li>
+                        <li><a href="#mayorista" class="hover:text-white transition-colors font-semibold text-amber-400">Venta Mayorista a Negocios</a></li>
+                    </ul>
+                </div>
+
+                <!-- Columna 4: Contacto Inmediato -->
+                <div>
+                    <h4 class="text-white font-black text-base mb-4">Atención al Cliente</h4>
+                    <ul class="space-y-2.5">
+                        <li class="flex items-start gap-2">
+                            <i class="ph ph-map-pin text-neutral-300 text-sm mt-0.5"></i>
+                            <span>Mac Iver #1945, Padre Las Casas</span>
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <i class="ph ph-clock text-neutral-300 text-sm"></i>
+                            <span>09:30 a 00:00 hrs continuado</span>
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <i class="ph-fill ph-whatsapp-logo text-emerald-400 text-sm"></i>
+                            <button onclick="openWhatsApp('Hola Minimarket A.T.R., tengo una consulta sobre un producto.')" class="hover:text-white font-bold transition-colors">
+                                +56 9 3117 1649
+                            </button>
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
+
+            <!-- Advertencia Legal y Derechos -->
+            <div class="pt-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-neutral-500 text-[11px]">
+                <p>&copy; <span id="currentYearSpan"></span> Minimarket A.T.R. Todos los derechos reservados.</p>
+                <div class="flex items-center gap-1.5 text-amber-500/80">
+                    <i class="ph-fill ph-warning-circle text-sm"></i>
+                    <span>Venta de bebidas alcohólicas exclusiva para mayores de 18 años.</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+
+    <!-- ==========================================
+         L. MODAL VISTA RÁPIDA DE PRODUCTO (QUICK VIEW)
+    =========================================== -->
+    <div 
+        id="quickViewModal" class="fixed inset-0 z-[140] hidden opacity-0 transition-opacity duration-300 flex items-center justify-center p-3 sm:p-6 bg-black/80 backdrop-blur-sm"
+        onclick="closeQuickView(event)"
+    >
+        <div 
+            class="bg-white rounded-2xl sm:rounded-3xl max-w-2xl w-full overflow-hidden shadow-modal border border-neutral-200 transform scale-95 transition-transform duration-300 relative max-h-[90vh] flex flex-col"
+            onclick="event.stopPropagation()"
+        >
+            <!-- Botón Cerrar -->
+            <button 
+                onclick="closeQuickView()" 
+                class="absolute top-4 right-4 z-20 w-8 h-8 rounded-full bg-neutral-100 hover:bg-neutral-200 text-neutral-600 flex items-center justify-center transition-colors"
+                aria-label="Cerrar vista rápida"
+            >
+                <i class="ph ph-x text-base"></i>
+            </button>
+
+            <div class="grid sm:grid-cols-2 overflow-y-auto no-scrollbar">
+                <!-- Imagen en Contenedor Nítido -->
+                <div class="img-container p-8 flex items-center justify-center border-b sm:border-b-0 sm:border-r border-neutral-100 relative min-h-[260px]">
+                    <span id="modalProductBadge" class="absolute top-4 left-4 text-[10px] font-bold px-2.5 py-0.5 rounded shadow-sm"></span>
+                    <img id="modalProductImg" src="" alt="" class="max-h-56 max-w-full object-contain drop-shadow-md">
+                </div>
+
+                <!-- Datos Comerciales y Acción -->
+                <div class="p-6 flex flex-col justify-between">
+                    <div>
+                        <span id="modalProductBrand" class="text-xs sm:text-sm font-extrabold text-neutral-400 uppercase tracking-wider block mb-1"></span>
+                        <h3 id="modalProductName" class="font-sans text-2xl sm:text-3xl font-black text-neutral-950 leading-snug mb-1"></h3>
+                        <span id="modalProductFormat" class="text-sm text-neutral-500 font-semibold block mb-3"></span>
+                        
+                        <!-- Precios -->
+                        <div class="flex items-baseline gap-2 mb-4">
+                            <span id="modalProductPrice" class="text-3xl sm:text-4xl font-black text-neutral-950"></span>
+                            <span id="modalProductOldPrice" class="text-sm text-neutral-400 line-through"></span>
+                            <span id="modalProductDiscountTag" class="text-xs font-bold text-atr-red ml-1"></span>
+                        </div>
+
+                        <p id="modalProductDescription" class="text-sm sm:text-base text-neutral-700 leading-relaxed mb-5"></p>
+                    </div>
+
+                    <!-- Controles de Compra -->
+                    <div class="space-y-3 pt-3 border-t border-neutral-100">
+                        <div class="flex items-center gap-3">
+                            <span class="text-sm font-bold text-neutral-800">Cantidad:</span>
+                            <div class="flex items-center border border-neutral-300 rounded-lg overflow-hidden bg-neutral-50">
+                                <button onclick="adjustModalQty(-1)" class="w-8 h-8 flex items-center justify-center text-neutral-600 hover:bg-neutral-200 text-sm font-bold">-</button>
+                                <span id="modalQuantity" class="w-8 text-center text-xs font-bold text-neutral-900">1</span>
+                                <button onclick="adjustModalQty(1)" class="w-8 h-8 flex items-center justify-center text-neutral-600 hover:bg-neutral-200 text-sm font-bold">+</button>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-2">
+                            <button 
+                                id="modalAddToCartBtn" class="bg-atr-base hover:bg-neutral-800 text-white font-black text-sm py-3 px-4 rounded-xl flex items-center justify-center gap-2 transition-colors shadow-sm"
+                            >
+                                <i class="ph-bold ph-plus"></i>
+                                <span>A la Canasta</span>
+                            </button>
+                            
+                            <button 
+                                id="modalWhatsAppBtn" class="bg-emerald-600 hover:bg-emerald-700 text-white font-black text-sm py-3 px-4 rounded-xl flex items-center justify-center gap-2 transition-colors shadow-sm"
+                            >
+                                <i class="ph-fill ph-whatsapp-logo text-sm"></i>
+                                <span>Pedir Ahora</span>
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- ==========================================
+         MOBILE FILTERS DRAWER (BOTTOM SHEET MODAL)
+    =========================================== -->
+    <div 
+        id="mobileFilterBackdrop" 
+        class="fixed inset-0 bg-black/70 backdrop-blur-sm z-[150] hidden opacity-0 transition-opacity duration-300"
+        onclick="toggleMobileFilters(false)"
+    ></div>
+
+    <div 
+        id="mobileFilterDrawer" 
+        class="fixed bottom-0 left-0 right-0 max-h-[85vh] bg-white rounded-t-3xl z-[160] shadow-modal transform translate-y-full transition-transform duration-300 ease-out flex flex-col pb-[max(1rem,env(safe-area-inset-bottom,0px))]"
+    >
+        <!-- Drag pill / Header -->
+        <div class="px-5 pt-3 pb-3 border-b border-neutral-100 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+                <i class="ph-bold ph-faders text-lg text-neutral-900"></i>
+                <h3 class="font-sans font-black text-lg text-neutral-950">Filtros de Catálogo</h3>
+            </div>
+            <button 
+                onclick="toggleMobileFilters(false)" 
+                class="w-8 h-8 rounded-full bg-neutral-100 text-neutral-600 flex items-center justify-center hover:bg-neutral-200 transition-colors"
+                aria-label="Cerrar filtros"
+            >
+                <i class="ph-bold ph-x text-sm"></i>
+            </button>
+        </div>
+
+        <!-- Filter Content -->
+        <div class="overflow-y-auto p-5 space-y-6 no-scrollbar flex-1">
+            <!-- Categorías -->
+            <div>
+                <label class="block text-xs font-black text-neutral-400 uppercase tracking-wider mb-2.5">
+                    Categoría
+                </label>
+                <div class="grid grid-cols-2 gap-2" id="mobileFilterCategoryList">
+                    <!-- Inyectado vía JS -->
+                </div>
+            </div>
+
+            <!-- Promociones -->
+            <div class="pt-4 border-t border-neutral-100">
+                <label class="flex items-center justify-between p-3 rounded-xl bg-neutral-50 border border-neutral-200 cursor-pointer">
+                    <span class="text-sm font-bold text-neutral-900 flex items-center gap-2">
+                        <i class="ph-fill ph-fire text-atr-red text-base"></i> Solo Ofertas Especiales
+                    </span>
+                    <input 
+                        type="checkbox" 
+                        id="mobileOnlyOffersCheckbox" 
+                        onchange="toggleOffersFilter(this.checked)"
+                        class="w-5 h-5 rounded border-neutral-300 text-atr-red focus:ring-red-500 cursor-pointer"
+                    >
+                </label>
+            </div>
+
+            <!-- Rango de Precios -->
+            <div class="pt-4 border-t border-neutral-100">
+                <div class="flex justify-between items-center mb-2">
+                    <label class="text-xs font-black text-neutral-400 uppercase tracking-wider">
+                        Precio Máximo
+                    </label>
+                    <span id="mobilePriceRangeDisplay" class="text-base font-black text-neutral-950">$35.000</span>
+                </div>
+                <input 
+                    type="range" 
+                    id="mobilePriceRangeInput" 
+                    min="400" 
+                    max="35000" 
+                    step="500" 
+                    value="35000" 
+                    oninput="handlePriceRange(this.value)"
+                    class="w-full accent-neutral-950 cursor-pointer h-2 bg-neutral-200 rounded-lg"
+                >
+                <div class="flex justify-between text-xs text-neutral-400 font-bold mt-1">
+                    <span>$400</span>
+                    <span>$35.000+</span>
+                </div>
+            </div>
+
+            <!-- Ordenar -->
+            <div class="pt-4 border-t border-neutral-100">
+                <label class="block text-xs font-black text-neutral-400 uppercase tracking-wider mb-2">
+                    Ordenar Productos
+                </label>
+                <select 
+                    id="mobileSortSelector" 
+                    onchange="handleSortChange(this.value)"
+                    class="w-full bg-neutral-50 border border-neutral-200 text-neutral-950 text-sm font-bold py-3 px-4 rounded-xl outline-none"
+                >
+                    <option value="relevance">Relevancia</option>
+                    <option value="price-asc">Menor precio</option>
+                    <option value="price-desc">Mayor precio</option>
+                    <option value="discount">Mayor descuento</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Footer Actions -->
+        <div class="p-4 border-t border-neutral-100 bg-neutral-50 flex gap-3">
+            <button 
+                onclick="resetAllFilters(); toggleMobileFilters(false);" 
+                class="flex-1 py-3 rounded-xl border border-neutral-200 text-neutral-800 font-extrabold text-sm hover:bg-neutral-200 transition-colors"
+            >
+                Limpiar
+            </button>
+            <button 
+                onclick="toggleMobileFilters(false)" 
+                class="flex-1 py-3 rounded-xl bg-neutral-950 text-white font-black text-sm hover:bg-neutral-800 transition-colors shadow-sm"
+            >
+                Ver Resultados
+            </button>
+        </div>
+    </div>
+
+
+    <!-- ==========================================
+         M. CARRITO LATERAL SLIDE-OVER (DRAWER)
+    =========================================== -->
+    <div 
+        id="cartBackdrop" 
+        class="fixed inset-0 bg-neutral-950/60 backdrop-blur-sm z-[150] hidden opacity-0 transition-opacity duration-300"
+        onclick="toggleCart(false)"
+    ></div>
+
+    <div 
+        id="cartDrawer" class="fixed top-0 right-0 h-full w-full sm:max-w-md bg-white z-[170] shadow-drawer transform translate-x-full transition-transform duration-300 ease-in-out flex flex-col"
+    >
+        <!-- Header del Carrito -->
+        <div class="px-5 py-4 border-b border-neutral-200 flex items-center justify-between bg-neutral-50">
+            <div class="flex items-center gap-2">
+                <i class="ph-bold ph-shopping-bag text-xl text-neutral-800"></i>
+                <h3 class="font-black text-neutral-950 text-lg">Mi Canasta de Compra</h3>
+                <span id="cartDrawerCountPill" class="bg-neutral-200 text-neutral-800 text-xs font-bold px-2 py-0.5 rounded-full">0</span>
+            </div>
+            <button 
+                onclick="toggleCart(false)" 
+                class="w-8 h-8 rounded-full bg-white text-neutral-500 hover:text-neutral-800 hover:bg-neutral-200 flex items-center justify-center transition-colors border border-neutral-200"
+                aria-label="Cerrar Carrito"
+            >
+                <i class="ph ph-x text-base"></i>
+            </button>
+        </div>
+
+        <!-- Barra de Progreso Despacho Gratis -->
+        <div class="bg-emerald-50 border-b border-emerald-100 p-3.5 text-sm text-emerald-900">
+            <div class="flex items-center justify-between font-semibold mb-1">
+                <span id="shippingProgressText" class="flex items-center gap-1">
+                    <i class="ph-fill ph-truck text-emerald-600"></i> Despacho en Padre Las Casas
+                </span>
+                <span id="shippingProgressAmount">$0 / $35.000</span>
+            </div>
+            <div class="w-full bg-emerald-200/60 rounded-full h-1.5 overflow-hidden">
+                <div id="shippingProgressBar" class="bg-emerald-600 h-full rounded-full transition-all duration-300" style="width: 0%"></div>
+            </div>
+        </div>
+
+        <!-- Lista de Artículos -->
+        <div id="cartItemsList" class="flex-1 overflow-y-auto p-5 space-y-3.5 no-scrollbar">
+            <!-- Inyectado dinámicamente vía JS -->
+        </div>
+
+        <!-- Estado Vacío del Carrito -->
+        <div id="cartEmptyMessage" class="hidden flex-1 flex flex-col items-center justify-center p-8 text-center">
+            <div class="w-16 h-16 rounded-full bg-neutral-100 text-neutral-400 flex items-center justify-center text-3xl mb-3">
+                <i class="ph ph-shopping-bag-open"></i>
+            </div>
+            <h4 class="font-sans text-xl font-bold text-neutral-800 mb-1">Tu canasta está vacía</h4>
+            <p class="text-xs text-neutral-500 mb-6 max-w-xs">
+                Añade abarrotes, lácteos, bebidas o snacks favoritos desde el catálogo para armar tu pedido.
+            </p>
+            <button 
+                onclick="toggleCart(false); scrollToSection('catalogo');" 
+                class="bg-atr-base hover:bg-neutral-800 text-white font-bold text-xs px-5 py-2.5 rounded-lg transition-colors"
+            >
+                Explorar Catálogo
+            </button>
+        </div>
+
+        <!-- Footer y Checkout por WhatsApp -->
+        <div id="cartFooterArea" class="border-t border-neutral-200 p-4 sm:p-5 bg-neutral-50 space-y-3.5 pb-[max(1.25rem,env(safe-area-inset-bottom,0px))]">
+            
+            <!-- Selector de Modalidad -->
+            <div class="bg-white p-2 rounded-xl border border-neutral-200 flex text-xs font-semibold">
+                <button 
+                    id="deliveryMethodBtn" onclick="setDeliveryOption('delivery')" class="flex-1 py-2 rounded-lg text-center transition-colors bg-atr-base text-white font-bold text-xs sm:text-sm"
+                >
+                    Despacho a Domicilio
+                </button>
+                <button 
+                    id="pickupMethodBtn" onclick="setDeliveryOption('pickup')" class="flex-1 py-2 rounded-lg text-center transition-colors text-neutral-600 hover:text-neutral-900 font-bold text-xs sm:text-sm"
+                >
+                    Retiro en Local Mac Iver
+                </button>
+            </div>
+
+            <!-- Desglose de Totales -->
+            <div class="space-y-1.5 text-xs text-neutral-600">
+                <div class="flex justify-between">
+                    <span>Subtotal de productos:</span>
+                    <strong id="cartSubtotalDisplay" class="text-neutral-800">$0</strong>
+                </div>
+                <div id="savingsRow" class="hidden flex justify-between text-atr-red font-semibold">
+                    <span>Ahorro en ofertas:</span>
+                    <span id="cartSavingsDisplay">-$0</span>
+                </div>
+                <div class="flex justify-between items-baseline pt-2 border-t border-neutral-200">
+                    <span class="text-base font-black text-neutral-950">Total Estimado:</span>
+                    <strong id="cartTotalDisplay" class="font-sans text-3xl font-black text-neutral-950">$0</strong>
+                </div>
+            </div>
+
+            <!-- Disclaimer Comercial Transparente -->
+            <p class="text-xs text-neutral-500 text-center leading-tight font-medium">
+                * El envío del pedido a WhatsApp es una <strong>solicitud de compra</strong> para coordinar stock y despacho, no un pago confirmado.
+            </p>
+
+            <!-- Botón WhatsApp Checkout -->
+            <button 
+                onclick="sendWhatsAppOrder()" 
+                class="w-full bg-[#25D366] hover:bg-[#1EBE5D] text-white py-4 px-5 rounded-2xl font-black text-sm sm:text-base tracking-wide flex items-center justify-center gap-2.5 shadow-sm transition-all active:scale-[0.99]"
+            >
+                <i class="ph-fill ph-whatsapp-logo text-xl"></i>
+                <span>Enviar Pedido a WhatsApp</span>
+            </button>
+        </div>
+    </div>
+
+
+    <!-- ==========================================
+         N. NAVEGACIÓN INFERIOR MÓVIL (APP STYLE)
+    =========================================== -->
+    <nav class="md:hidden fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-neutral-200 z-[100] px-2 pt-2 pb-[max(0.5rem,env(safe-area-inset-bottom,0px))] flex items-center justify-around shadow-lg">
+        <a href="#" class="flex flex-col items-center text-neutral-700 hover:text-atr-base py-1 px-2 text-xs font-bold">
+            <i class="ph-bold ph-house text-lg"></i>
+            <span>Inicio</span>
+        </a>
+        <a href="#catalogo" class="flex flex-col items-center text-neutral-700 hover:text-atr-base py-1 px-2 text-xs font-bold">
+            <i class="ph-bold ph-squares-four text-lg"></i>
+            <span>Catálogo</span>
+        </a>
+        <button onclick="filterOffersOnly(); scrollToSection('catalogo');" class="flex flex-col items-center text-atr-red py-1 px-2 text-xs font-bold">
+            <i class="ph-fill ph-fire text-lg"></i>
+            <span>Ofertas</span>
+        </button>
+        <button onclick="openWhatsApp('Hola Minimarket A.T.R., quisiera coordinar una compra desde el móvil.')" class="flex flex-col items-center text-emerald-600 py-1 px-2 text-xs font-bold">
+            <i class="ph-fill ph-whatsapp-logo text-lg"></i>
+            <span>Chat</span>
+        </button>
+        <button onclick="toggleCart(true)" class="relative flex flex-col items-center text-neutral-950 py-1 px-2 text-xs font-bold">
+            <i class="ph-bold ph-shopping-bag text-lg"></i>
+            <span>Canasta</span>
+            <span id="mobileBottomCartBadge" class="absolute top-0 right-1 bg-atr-red text-white text-[9px] font-bold h-4 w-4 rounded-full flex items-center justify-center border border-white scale-0 transition-transform">0</span>
+        </button>
+    </nav>
+
+
+    <!-- ==========================================
+         O. TOAST DE NOTIFICACIÓN FLOTANTE
+    =========================================== -->
+    <div 
+        id="toastNotification" 
+        class="fixed bottom-20 md:bottom-6 right-1/2 translate-x-1/2 md:translate-x-0 md:right-6 bg-neutral-900 text-white px-4 py-2.5 rounded-xl shadow-modal z-[200] font-sans text-xs font-semibold flex items-center gap-3 transition-all duration-300 opacity-0 translate-y-4 pointer-events-none border border-neutral-700"
+    >
+        <i class="ph-fill ph-check-circle text-emerald-400 text-base"></i>
+        <span id="toastMessage">Producto agregado</span>
+        <button onclick="toggleCart(true)" class="text-amber-400 hover:underline text-[11px] ml-1 pointer-events-auto">Ver Canasta</button>
+    </div>
+
+
+    <!-- ==========================================
+         LÓGICA JAVASCRIPT DEL E-COMMERCE
+    =========================================== -->
+    <script>
+        // Utilidades de formato
+        const formatCLP = (amount) => {
+            return '$' + Math.round(amount).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+        };
+
+        const calculateDiscountPercent = (price, oldPrice) => {
+            if (!oldPrice || oldPrice <= price) return 0;
+            return Math.round(((oldPrice - price) / oldPrice) * 100);
+        };
+
+        const openWhatsApp = (msg) => {
+            const url = `https://wa.me/${STORE_CONFIG.whatsappNumber}?text=${encodeURIComponent(msg)}`;
+            window.open(url, '_blank');
+        };
+
+        const scrollToSection = (id) => {
+            const el = document.getElementById(id);
+            if (el) {
+                const yOffset = -90;
+                const y = el.getBoundingClientRect().top + window.pageYOffset + yOffset;
+                window.scrollTo({ top: y, behavior: 'smooth' });
+            }
+        };
+
+        // Año actual
+        document.getElementById('currentYearSpan').textContent = new Date().getFullYear();
+
+        // 1. RENDERIZADO DE CHIPS DE CATEGORÍAS EN HEADER & SIDEBAR
+        const renderCategoryNav = () => {
+            const navContainer = document.getElementById('navCategoryChips');
+            const sidebarContainer = document.getElementById('sidebarCategoryList');
+            
+            let navHTML = '';
+            let sidebarHTML = '';
+
+            CATEGORIES.forEach(cat => {
+                const isActive = activeCategory === cat.id;
+                
+                // Chip horizontal superior (Header Negro / Contraste Blanco)
+                navHTML += `
+                    <button 
+                        onclick="setCategory('${cat.id}')" 
+                        class="px-4 py-2 rounded-full text-sm font-bold transition-all whitespace-nowrap flex items-center gap-2 ${
+                            isActive 
+                                ? 'bg-white text-neutral-950 font-black shadow-sm' 
+                                : 'text-neutral-300 hover:text-white hover:bg-white/10'
+                        }"
+                    >
+                        <i class="ph ${cat.icon} text-sm"></i>
+                        <span>${cat.name}</span>
+                    </button>
+                `;
+
+                // Item lista sidebar
+                sidebarHTML += `
+                    <button 
+                        onclick="setCategory('${cat.id}')" 
+                        class="w-full text-left px-3.5 py-2.5 rounded-xl text-sm font-bold transition-all flex items-center justify-between ${
+                            isActive 
+                                ? 'bg-neutral-100 text-neutral-950 font-extrabold border-l-4 border-atr-base' 
+                                : 'text-neutral-600 hover:bg-neutral-50 hover:text-neutral-950'
+                        }"
+                    >
+                        <span class="flex items-center gap-2">
+                            <i class="ph ${cat.icon} text-sm text-neutral-500"></i>
+                            ${cat.name}
+                        </span>
+                        <span class="text-[10px] text-neutral-400 font-normal">
+                            ${cat.id === 'all' ? PRODUCTS.length : PRODUCTS.filter(p => p.category === cat.id).length}
+                        </span>
+                    </button>
+                `;
+            });
+
+            if (navContainer) navContainer.innerHTML = navHTML;
+            if (sidebarContainer) sidebarContainer.innerHTML = sidebarHTML;
+        };
+
+        // 2. GENERADOR DE TARJETA DE PRODUCTO ESTÁNDAR
+        const createProductCard = (product) => {
+            const hasDiscount = product.oldPrice && product.oldPrice > product.price;
+            const discountPct = hasDiscount ? calculateDiscountPercent(product.price, product.oldPrice) : 0;
+            
+            let badgeHTML = '';
+            if (hasDiscount) {
+                badgeHTML = `<span class="bg-atr-red text-white text-xs font-black px-2.5 py-1 rounded-md shadow-sm">-${discountPct}%</span>`;
+            } else if (product.badge) {
+                badgeHTML = `<span class="bg-amber-500 text-neutral-950 text-xs font-black px-2.5 py-1 rounded-md shadow-sm uppercase tracking-wide">${product.badge}</span>`;
+            }
+
+            return `
+                <article class="bg-white border border-neutral-200 rounded-2xl overflow-hidden hover:shadow-card-hover transition-all duration-300 flex flex-col group relative h-full">
+                    <!-- Badges -->
+                    <div class="absolute top-2.5 left-2.5 z-10 flex flex-col gap-1 pointer-events-none">
+                        ${badgeHTML}
+                    </div>
+
+                    <!-- Botón Vista Rápida -->
+                    <button 
+                        onclick="openQuickView(${product.id})" 
+                        class="absolute top-2.5 right-2.5 z-10 bg-white/90 hover:bg-white text-neutral-700 hover:text-neutral-950 w-7 h-7 rounded-full flex items-center justify-center text-xs shadow-sm opacity-90 sm:opacity-0 group-hover:opacity-100 transition-opacity"
+                        title="Vista rápida del producto"
+                        aria-label="Ver detalles de ${product.name}"
+                    >
+                        <i class="ph ph-eye"></i>
+                    </button>
+
+                    <!-- Imagen del Producto con fondo limpio -->
+                    <div 
+                        onclick="openQuickView(${product.id})"
+                        class="img-container pt-[85%] relative border-b border-neutral-100 cursor-pointer overflow-hidden"
+                    >
+                        <img 
+                            src="${product.img}" 
+                            alt="${product.name}" 
+                            loading="lazy"
+                            class="absolute inset-0 w-full h-full object-contain p-4 group-hover:scale-105 transition-transform duration-500 drop-shadow-sm"
+                            onerror="this.src='https://images.unsplash.com/photo-1578916171728-46686eac8d58?q=80&w=700&auto=format&fit=crop'"
+                        >
+                    </div>
+
+                    <!-- Información Comercial -->
+                    <div class="p-3.5 sm:p-4 flex flex-col flex-1">
+                        <div class="flex items-center justify-between gap-1 mb-1">
+                            <span class="text-xs font-extrabold uppercase tracking-wider text-neutral-400 line-clamp-1">
+                                ${product.brand}
+                            </span>
+                            <span class="text-xs text-neutral-500 font-bold">
+                                ${product.format}
+                            </span>
+                        </div>
+
+                        <h3 
+                            onclick="openQuickView(${product.id})"
+                            class="font-sans font-extrabold text-base sm:text-lg text-neutral-900 leading-snug mb-3 line-clamp-2 cursor-pointer hover:text-atr-wine transition-colors"
+                        >
+                            ${product.name}
+                        </h3>
+
+                        <!-- Precios y Acción de Compra Directa -->
+                        <div class="mt-auto pt-2 border-t border-neutral-100 flex items-center justify-between gap-2">
+                            <div>
+                                <span class="font-sans text-xl sm:text-2xl font-black text-neutral-950 block leading-tight">
+                                    ${formatCLP(product.price)}
+                                </span>
+                                ${hasDiscount ? `<span class="text-xs sm:text-sm text-neutral-400 font-semibold line-through block leading-none mt-0.5">${formatCLP(product.oldPrice)}</span>` : ''}
+                            </div>
+
+                            <button 
+                                onclick="quickAddToCart(${product.id})"
+                                class="bg-neutral-100 hover:bg-atr-base text-neutral-950 hover:text-white px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-xl text-xs sm:text-sm font-extrabold transition-all duration-200 flex items-center gap-1.5 active:scale-95 shadow-sm"
+                                title="Agregar a la canasta"
+                            >
+                                <i class="ph-bold ph-plus"></i>
+                                <span class="hidden sm:inline">Agregar</span>
+                            </button>
+                        </div>
+                    </div>
+                </article>
+            `;
+        };
+
+        // 3. RENDERIZADO DEL CATÁLOGO CON FILTRADO Y ORDEN
+        const renderCatalog = () => {
+            const grid = document.getElementById('catalogGrid');
+            const noResults = document.getElementById('noResultsState');
+            const countEl = document.getElementById('visibleProductsCount');
+            const maxPrice = parseInt(document.getElementById('priceRangeInput').value, 10);
+
+            let filtered = PRODUCTS.filter(p => {
+                // Filtro categoría
+                if (activeCategory !== 'all' && p.category !== activeCategory) return false;
+                // Filtro ofertas
+                if (onlyOffers && (!p.oldPrice || p.oldPrice <= p.price)) return false;
+                // Filtro precio
+                if (p.price > maxPrice) return false;
+                // Filtro búsqueda
+                if (searchQuery.trim() !== '') {
+                    const q = searchQuery.toLowerCase().trim();
+                    const matchName = p.name.toLowerCase().includes(q);
+                    const matchBrand = p.brand.toLowerCase().includes(q);
+                    const matchCat = p.category.toLowerCase().includes(q);
+                    if (!matchName && !matchBrand && !matchCat) return false;
+                }
+                return true;
+            });
+
+            // Ordenamiento
+            if (sortBy === 'price-asc') {
+                filtered.sort((a, b) => a.price - b.price);
+            } else if (sortBy === 'price-desc') {
+                filtered.sort((a, b) => b.price - a.price);
+            } else if (sortBy === 'discount') {
+                filtered.sort((a, b) => {
+                    const discA = calculateDiscountPercent(a.price, a.oldPrice);
+                    const discB = calculateDiscountPercent(b.price, b.oldPrice);
+                    return discB - discA;
+                });
+            }
+
+            countEl.textContent = filtered.length;
+
+            if (filtered.length === 0) {
+                grid.innerHTML = '';
+                noResults.classList.remove('hidden');
+            } else {
+                noResults.classList.add('hidden');
+                grid.innerHTML = filtered.map(p => createProductCard(p)).join('');
+            }
+
+            updateFilterTags();
+        };
+
+        // 4. RENDERIZADO DE OFERTAS FLASH (HERO/DESTACADOS)
+        const renderFlashDeals = () => {
+            const container = document.getElementById('flashDealsGrid');
+            if (!container) return;
+            const offers = PRODUCTS.filter(p => p.oldPrice && p.oldPrice > p.price).slice(0, 4);
+            container.innerHTML = offers.map(p => createProductCard(p)).join('');
+        };
+
+        // 5. RENDERIZADO DE VENTA MAYORISTA
+        const renderWholesale = () => {
+            const container = document.getElementById('wholesaleGrid');
+            if (!container) return;
+            container.innerHTML = WHOLESALE_ITEMS.map(item => `
+                <div class="bg-neutral-900 border border-neutral-800 p-5 rounded-2xl flex flex-col justify-between hover:border-amber-500/50 transition-colors">
+                    <div>
+                        <div class="flex justify-between items-start mb-2">
+                            <span class="text-xs font-black uppercase px-2.5 py-1 rounded bg-amber-500/15 text-amber-400 border border-amber-500/30">
+                                ${item.highlight}
+                            </span>
+                            <span class="text-xs text-neutral-400">${item.moq}</span>
+                        </div>
+                        <h3 class="font-sans text-xl font-black text-white leading-snug mb-1.5">${item.name}</h3>
+                        <p class="text-sm text-neutral-400 mb-5">${item.format}</p>
+                    </div>
+
+                    <div class="pt-3 border-t border-neutral-800 flex items-center justify-between">
+                        <div>
+                            <span class="text-2xl sm:text-3xl font-black text-white">${formatCLP(item.price)}</span>
+                            <span class="text-xs sm:text-sm text-neutral-400 font-medium"> / ${item.priceUnit}</span>
+                        </div>
+                        <button 
+                            onclick="openWhatsApp('Hola Minimarket A.T.R., quisiera cotizar venta por mayor de: ${encodeURIComponent(item.name)} (${item.moq})')"
+                            class="bg-white/10 hover:bg-white text-white hover:text-neutral-950 p-2 rounded-lg text-sm transition-colors"
+                            title="Cotizar por WhatsApp"
+                        >
+                            <i class="ph ph-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        };
+
+        // 6. RENDERIZADO DE RESEÑAS
+        const renderReviews = () => {
+            const container = document.getElementById('reviewsGrid');
+            if (!container) return;
+            container.innerHTML = REVIEWS.map(r => `
+                <div class="bg-neutral-50 border border-neutral-200 p-6 rounded-2xl flex flex-col justify-between shadow-subtle">
+                    <p class="text-base text-neutral-700 italic leading-relaxed mb-5 font-normal">
+                        "${r.text}"
+                    </p>
+                    <div class="pt-3 border-t border-neutral-200/80 flex items-center justify-between">
+                        <div>
+                            <strong class="block text-sm sm:text-base font-black text-neutral-950">${r.author}</strong>
+                            <span class="text-xs sm:text-sm text-neutral-500 font-medium">${r.sector}</span>
+                        </div>
+                        <span class="text-xs text-emerald-700 font-bold bg-emerald-50 px-2.5 py-1 rounded border border-emerald-200">
+                            Compra Verificada
+                        </span>
+                    </div>
+                </div>
+            `).join('');
+        };
+
+        // 7. RENDERIZADO DE FEED DE INSTAGRAM (9 POSTS GRID 3X3)
+        const renderInstagramFeed = () => {
+            const container = document.getElementById('instagramGrid');
+            if (!container) return;
+            container.innerHTML = INSTAGRAM_POSTS.map(post => `
+                <a 
+                    href="${post.postUrl}" 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    class="group relative aspect-square rounded-2xl overflow-hidden bg-neutral-200 block shadow-card hover:shadow-card-hover border border-neutral-200 transition-all duration-300"
+                    aria-label="Ver post de Instagram"
+                >
+                    <img 
+                        src="${post.img}" 
+                        alt="Instagram @minimarketatr" 
+                        class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                        loading="lazy"
+                    >
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/95 via-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-between p-5 text-white">
+                        <div class="flex items-center justify-between">
+                            <span class="inline-flex items-center gap-1.5 bg-black/60 backdrop-blur-md px-3 py-1 rounded-full text-xs font-black text-pink-400 border border-white/10">
+                                <i class="ph-fill ph-instagram-logo text-base"></i> @minimarketatr
+                            </span>
+                            <span class="text-xs text-white/90 font-extrabold flex items-center gap-1 bg-white/15 px-2.5 py-1 rounded-full">
+                                Ver en Instagram <i class="ph-bold ph-arrow-up-right text-xs"></i>
+                            </span>
+                        </div>
+                        <div>
+                            <div class="flex items-center gap-4 text-xs sm:text-sm font-extrabold text-white mb-2">
+                                <span class="flex items-center gap-1.5"><i class="ph-fill ph-heart text-red-500 text-base"></i> ${post.likes}</span>
+                                <span class="flex items-center gap-1.5"><i class="ph-fill ph-chat-circle text-amber-300 text-base"></i> ${post.comments}</span>
+                            </div>
+                            <p class="text-xs sm:text-sm font-medium line-clamp-2 leading-snug text-neutral-100 mb-1.5">${post.caption}</p>
+                            <span class="text-xs text-amber-400 font-extrabold block">${post.tag}</span>
+                        </div>
+                    </div>
+                </a>
+            `).join('');
+        };
+
+        // 8. CONTROLADORES DE FILTROS Y BÚSQUEDA
+        const setCategory = (catId) => {
+            activeCategory = catId;
+            renderCategoryNav();
+            renderCatalog();
+        };
+
+        const handleSearch = (val) => {
+            searchQuery = val;
+            const clearBtn = document.getElementById('clearSearchBtn');
+            if (clearBtn) {
+                if (val.trim().length > 0) clearBtn.classList.remove('hidden');
+                else clearBtn.classList.add('hidden');
+            }
+            renderCatalog();
+        };
+
+        const clearSearchInput = () => {
+            searchQuery = '';
+            const desktopInput = document.getElementById('globalSearchInput');
+            const mobileInput = document.getElementById('mobileSearchInput');
+            if (desktopInput) desktopInput.value = '';
+            if (mobileInput) mobileInput.value = '';
+            document.getElementById('clearSearchBtn').classList.add('hidden');
+            renderCatalog();
+        };
+
+        const toggleOffersFilter = (checked) => {
+            onlyOffers = checked;
+            const sidebarCheckbox = document.getElementById('sidebarOnlyOffersCheckbox');
+            if (sidebarCheckbox) sidebarCheckbox.checked = checked;
+            renderCatalog();
+        };
+
+        const filterOffersOnly = () => {
+            onlyOffers = true;
+            activeCategory = 'all';
+            const sidebarCheckbox = document.getElementById('sidebarOnlyOffersCheckbox');
+            if (sidebarCheckbox) sidebarCheckbox.checked = true;
+            renderCategoryNav();
+            renderCatalog();
+            scrollToSection('catalogo');
+        };
+
+        const handlePriceRange = (val) => {
+            document.getElementById('priceRangeDisplay').textContent = formatCLP(val);
+            const mobileDisplay = document.getElementById('mobilePriceRangeDisplay');
+            if (mobileDisplay) mobileDisplay.textContent = formatCLP(val);
+            const desktopSlider = document.getElementById('priceRangeInput');
+            const mobileSlider = document.getElementById('mobilePriceRangeInput');
+            if (desktopSlider) desktopSlider.value = val;
+            if (mobileSlider) mobileSlider.value = val;
+            renderCatalog();
+        };
+
+        const handleSortChange = (val) => {
+            sortBy = val;
+            const desktopSort = document.getElementById('sortSelector');
+            const mobileSort = document.getElementById('mobileSortSelector');
+            if (desktopSort) desktopSort.value = val;
+            if (mobileSort) mobileSort.value = val;
+            renderCatalog();
+        };
+
+        const resetAllFilters = () => {
+            activeCategory = 'all';
+            searchQuery = '';
+            onlyOffers = false;
+            sortBy = 'relevance';
+            document.getElementById('priceRangeInput').value = 35000;
+            document.getElementById('priceRangeDisplay').textContent = '$35.000';
+            
+            const desktopInput = document.getElementById('globalSearchInput');
+            const mobileInput = document.getElementById('mobileSearchInput');
+            if (desktopInput) desktopInput.value = '';
+            if (mobileInput) mobileInput.value = '';
+            
+            const sidebarCheckbox = document.getElementById('sidebarOnlyOffersCheckbox');
+            if (sidebarCheckbox) sidebarCheckbox.checked = false;
+            
+            document.getElementById('sortSelector').value = 'relevance';
+            const mobileSort = document.getElementById('mobileSortSelector');
+            if (mobileSort) mobileSort.value = 'relevance';
+            const mobileSlider = document.getElementById('mobilePriceRangeInput');
+            if (mobileSlider) mobileSlider.value = 35000;
+            const mobilePriceDisplay = document.getElementById('mobilePriceRangeDisplay');
+            if (mobilePriceDisplay) mobilePriceDisplay.textContent = '$35.000';
+            const mobileCheckbox = document.getElementById('mobileOnlyOffersCheckbox');
+            if (mobileCheckbox) mobileCheckbox.checked = false;
+            document.getElementById('clearSearchBtn').classList.add('hidden');
+            
+            renderCategoryNav();
+            renderCatalog();
+        };
+
+        const updateFilterTags = () => {
+            const container = document.getElementById('activeFilterTagsContainer');
+            let tags = [];
+
+            if (activeCategory !== 'all') {
+                const catObj = CATEGORIES.find(c => c.id === activeCategory);
+                tags.push(`
+                    <span class="inline-flex items-center gap-1.5 bg-neutral-200 text-neutral-800 text-xs px-2.5 py-1 rounded-full font-medium">
+                        Categoría: ${catObj ? catObj.name : activeCategory}
+                        <button onclick="setCategory('all')" class="hover:text-red-600"><i class="ph ph-x"></i></button>
+                    </span>
+                `);
+            }
+
+            if (onlyOffers) {
+                tags.push(`
+                    <span class="inline-flex items-center gap-1.5 bg-red-100 text-red-800 text-xs px-2.5 py-1 rounded-full font-medium">
+                        Solo Ofertas
+                        <button onclick="toggleOffersFilter(false)" class="hover:text-red-950"><i class="ph ph-x"></i></button>
+                    </span>
+                `);
+            }
+
+            if (searchQuery.trim() !== '') {
+                tags.push(`
+                    <span class="inline-flex items-center gap-1.5 bg-amber-100 text-amber-900 text-xs px-2.5 py-1 rounded-full font-medium">
+                        "${searchQuery}"
+                        <button onclick="clearSearchInput()" class="hover:text-red-600"><i class="ph ph-x"></i></button>
+                    </span>
+                `);
+            }
+
+            if (tags.length > 0) {
+                container.classList.remove('hidden');
+                container.innerHTML = tags.join('');
+            } else {
+                container.classList.add('hidden');
+                container.innerHTML = '';
+            }
+        };
+
+
+        // 9. CARRITO LATERAL & PERSISTENCIA LOCALSTORAGE
+        const saveCart = () => {
+            localStorage.setItem('atr_cart_v2', JSON.stringify(cartState));
+            updateCartBadges();
+            updateCartUI();
+        };
+
+        const toggleCart = (open) => {
+            const backdrop = document.getElementById('cartBackdrop');
+            const drawer = document.getElementById('cartDrawer');
+            
+            if (open) {
+                backdrop.classList.remove('hidden');
+                setTimeout(() => {
+                    backdrop.classList.remove('opacity-0');
+                    drawer.classList.remove('translate-x-full');
+                }, 10);
+            } else {
+                backdrop.classList.add('opacity-0');
+                drawer.classList.add('translate-x-full');
+                setTimeout(() => {
+                    backdrop.classList.add('hidden');
+                }, 300);
+            }
+        };
+
+        const quickAddToCart = (productId) => {
+            const product = PRODUCTS.find(p => p.id === productId);
+            if (!product) return;
+
+            const existingIndex = cartState.findIndex(item => item.id === productId);
+            if (existingIndex > -1) {
+                cartState[existingIndex].quantity += 1;
+            } else {
+                cartState.push({
+                    id: product.id,
+                    name: product.name,
+                    brand: product.brand,
+                    format: product.format,
+                    price: product.price,
+                    oldPrice: product.oldPrice,
+                    img: product.img,
+                    quantity: 1
+                });
+            }
+
+            saveCart();
+            showToast(`Agregaste ${product.name}`);
+        };
+
+        const updateCartItemQuantity = (productId, delta) => {
+            const item = cartState.find(i => i.id === productId);
+            if (!item) return;
+
+            item.quantity += delta;
+            if (item.quantity <= 0) {
+                cartState = cartState.filter(i => i.id !== productId);
+            }
+
+            saveCart();
+        };
+
+        const removeCartItem = (productId) => {
+            cartState = cartState.filter(i => i.id !== productId);
+            saveCart();
+        };
+
+        const updateCartBadges = () => {
+            const totalCount = cartState.reduce((sum, item) => sum + item.quantity, 0);
+            
+            const headerBadge = document.getElementById('cartCountBadge');
+            const mobileBadge = document.getElementById('mobileBottomCartBadge');
+            const drawerPill = document.getElementById('cartDrawerCountPill');
+
+            if (headerBadge) {
+                headerBadge.textContent = totalCount;
+                if (totalCount > 0) {
+                    headerBadge.classList.remove('scale-0');
+                    headerBadge.classList.add('scale-100');
+                } else {
+                    headerBadge.classList.remove('scale-100');
+                    headerBadge.classList.add('scale-0');
+                }
+            }
+
+            if (mobileBadge) {
+                mobileBadge.textContent = totalCount;
+                if (totalCount > 0) {
+                    mobileBadge.classList.remove('scale-0');
+                    mobileBadge.classList.add('scale-100');
+                } else {
+                    mobileBadge.classList.remove('scale-100');
+                    mobileBadge.classList.add('scale-0');
+                }
+            }
+
+            if (drawerPill) {
+                drawerPill.textContent = totalCount;
+            }
+        };
+
+        const updateCartUI = () => {
+            const listContainer = document.getElementById('cartItemsList');
+            const emptyMsg = document.getElementById('cartEmptyMessage');
+            const footerArea = document.getElementById('cartFooterArea');
+            const subtotalEl = document.getElementById('cartSubtotalDisplay');
+            const totalEl = document.getElementById('cartTotalDisplay');
+            const savingsRow = document.getElementById('savingsRow');
+            const savingsEl = document.getElementById('cartSavingsDisplay');
+
+            // Barra de progreso despacho
+            const shippingProgressText = document.getElementById('shippingProgressText');
+            const shippingProgressAmount = document.getElementById('shippingProgressAmount');
+            const shippingProgressBar = document.getElementById('shippingProgressBar');
+
+            if (cartState.length === 0) {
+                listContainer.innerHTML = '';
+                emptyMsg.classList.remove('hidden');
+                footerArea.classList.add('hidden');
+                shippingProgressAmount.textContent = `$0 / ${formatCLP(STORE_CONFIG.freeDeliveryThreshold)}`;
+                shippingProgressBar.style.width = '0%';
+                return;
+            }
+
+            emptyMsg.classList.add('hidden');
+            footerArea.classList.remove('hidden');
+
+            let subtotal = 0;
+            let totalSavings = 0;
+
+            listContainer.innerHTML = cartState.map(item => {
+                const itemTotal = item.price * item.quantity;
+                subtotal += itemTotal;
+                if (item.oldPrice && item.oldPrice > item.price) {
+                    totalSavings += (item.oldPrice - item.price) * item.quantity;
+                }
+
+                return `
+                    <div class="flex gap-3 bg-white p-3 rounded-xl border border-neutral-200 shadow-subtle items-center">
+                        <div class="w-16 h-16 bg-neutral-50 rounded-lg p-1.5 flex items-center justify-center flex-shrink-0 border border-neutral-100">
+                            <img src="${item.img}" alt="${item.name}" class="max-h-full max-w-full object-contain">
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <span class="text-xs text-neutral-400 font-extrabold uppercase block">${item.brand}</span>
+                            <h4 class="font-sans font-bold text-sm text-neutral-900 leading-snug line-clamp-1 mb-0.5">${item.name}</h4>
+                            <span class="text-xs text-neutral-500 font-semibold block mb-2">${item.format} • ${formatCLP(item.price)}</span>
+                            
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center border border-neutral-200 rounded bg-neutral-50">
+                                    <button onclick="updateCartItemQuantity(${item.id}, -1)" class="w-6 h-6 flex items-center justify-center text-neutral-600 hover:bg-neutral-200 text-xs font-bold">-</button>
+                                    <span class="w-6 text-center text-xs font-bold text-neutral-900">${item.quantity}</span>
+                                    <button onclick="updateCartItemQuantity(${item.id}, 1)" class="w-6 h-6 flex items-center justify-center text-neutral-600 hover:bg-neutral-200 text-xs font-bold">+</button>
+                                </div>
+                                <strong class="text-sm font-black text-neutral-950">${formatCLP(itemTotal)}</strong>
+                            </div>
+                        </div>
+                        <button onclick="removeCartItem(${item.id})" class="text-neutral-400 hover:text-red-500 p-1 self-start" title="Eliminar">
+                            <i class="ph ph-trash text-sm"></i>
+                        </button>
+                    </div>
+                `;
+            }).join('');
+
+            subtotalEl.textContent = formatCLP(subtotal);
+            totalEl.textContent = formatCLP(subtotal);
+
+            if (totalSavings > 0) {
+                savingsRow.classList.remove('hidden');
+                savingsEl.textContent = `-${formatCLP(totalSavings)}`;
+            } else {
+                savingsRow.classList.add('hidden');
+            }
+
+            // Progreso de despacho gratis
+            const remaining = STORE_CONFIG.freeDeliveryThreshold - subtotal;
+            const pct = Math.min(100, Math.round((subtotal / STORE_CONFIG.freeDeliveryThreshold) * 100));
+            shippingProgressBar.style.width = `${pct}%`;
+            shippingProgressAmount.textContent = `${formatCLP(subtotal)} / ${formatCLP(STORE_CONFIG.freeDeliveryThreshold)}`;
+
+            if (remaining <= 0) {
+                shippingProgressText.innerHTML = `<i class="ph-fill ph-check-circle text-emerald-600"></i> ¡Tienes Despacho Gratis en Padre Las Casas!`;
+            } else {
+                shippingProgressText.innerHTML = `<i class="ph-fill ph-truck text-emerald-600"></i> Faltan <strong>${formatCLP(remaining)}</strong> para despacho gratis`;
+            }
+        };
+
+        const setDeliveryOption = (option) => {
+            deliveryMethod = option;
+            const delBtn = document.getElementById('deliveryMethodBtn');
+            const picBtn = document.getElementById('pickupMethodBtn');
+            if (option === 'delivery') {
+                delBtn.className = "flex-1 py-1.5 rounded-lg text-center transition-colors bg-atr-base text-white";
+                picBtn.className = "flex-1 py-1.5 rounded-lg text-center transition-colors text-neutral-600 hover:text-neutral-900";
+            } else {
+                picBtn.className = "flex-1 py-1.5 rounded-lg text-center transition-colors bg-atr-base text-white";
+                delBtn.className = "flex-1 py-1.5 rounded-lg text-center transition-colors text-neutral-600 hover:text-neutral-900";
+            }
+        };
+
+        // 10. CHECKOUT GENERADOR DE WHATSAPP CON MENSAJE ESTRUCTURADO
+        const sendWhatsAppOrder = () => {
+            if (cartState.length === 0) return;
+
+            let msg = `🛒 *SOLICITUD DE PEDIDO — MINIMARKET A.T.R.*
+`;
+            msg += `Hola, quisiera coordinar la compra de los siguientes productos:
+
+`;
+
+            let subtotal = 0;
+            cartState.forEach(item => {
+                const itemTotal = item.price * item.quantity;
+                subtotal += itemTotal;
+                msg += `▪ ${item.quantity}x ${item.name} (${item.format}) — ${formatCLP(itemTotal)}
+`;
+            });
+
+            msg += `
+*TOTAL ESTIMADO:* ${formatCLP(subtotal)}
+`;
+            msg += `*MODALIDAD:* ${deliveryMethod === 'delivery' ? 'Despacho a Domicilio (Padre Las Casas / Temuco)' : 'Retiro en Local Mac Iver #1945'}
+
+`;
+            msg += `_Nota: Esta es una solicitud de compra para confirmar disponibilidad y dirección de entrega. ¡Muchas gracias!_`;
+
+            openWhatsApp(msg);
+        };
+
+
+        // 11. MODAL VISTA RÁPIDA (QUICK VIEW)
+        let quickViewActiveProduct = null;
+        let quickViewQty = 1;
+
+        const openQuickView = (productId) => {
+            const product = PRODUCTS.find(p => p.id === productId);
+            if (!product) return;
+
+            quickViewActiveProduct = product;
+            quickViewQty = 1;
+
+            const modal = document.getElementById('quickViewModal');
+            document.getElementById('modalProductImg').src = product.img;
+            document.getElementById('modalProductBrand').textContent = product.brand;
+            document.getElementById('modalProductName').textContent = product.name;
+            
+            const catObj = CATEGORIES.find(c => c.id === product.category);
+            document.getElementById('modalProductFormat').textContent = `Formato: ${product.format} • Categoría: ${catObj ? catObj.name : product.category}`;
+            document.getElementById('modalProductDescription').textContent = product.description;
+            document.getElementById('modalProductPrice').textContent = formatCLP(product.price);
+            document.getElementById('modalQuantity').textContent = quickViewQty;
+
+            const oldPriceEl = document.getElementById('modalProductOldPrice');
+            const discountTagEl = document.getElementById('modalProductDiscountTag');
+            const badgeEl = document.getElementById('modalProductBadge');
+
+            if (product.oldPrice && product.oldPrice > product.price) {
+                const pct = calculateDiscountPercent(product.price, product.oldPrice);
+                oldPriceEl.textContent = formatCLP(product.oldPrice);
+                oldPriceEl.classList.remove('hidden');
+                discountTagEl.textContent = `-${pct}% DSCTO`;
+                discountTagEl.classList.remove('hidden');
+                badgeEl.textContent = `OFERTA`;
+                badgeEl.className = "absolute top-4 left-4 text-[10px] font-bold px-2.5 py-0.5 rounded shadow-sm bg-atr-red text-white";
+                badgeEl.classList.remove('hidden');
+            } else {
+                oldPriceEl.classList.add('hidden');
+                discountTagEl.classList.add('hidden');
+                if (product.badge) {
+                    badgeEl.textContent = product.badge;
+                    badgeEl.className = "absolute top-4 left-4 text-[10px] font-bold px-2.5 py-0.5 rounded shadow-sm bg-amber-500 text-neutral-950 uppercase";
+                    badgeEl.classList.remove('hidden');
+                } else {
+                    badgeEl.classList.add('hidden');
+                }
+            }
+
+            document.getElementById('modalAddToCartBtn').onclick = () => {
+                for (let i = 0; i < quickViewQty; i++) {
+                    quickAddToCart(product.id);
+                }
+                closeQuickView();
+            };
+
+            document.getElementById('modalWhatsAppBtn').onclick = () => {
+                const total = product.price * quickViewQty;
+                const msg = `Hola Minimarket A.T.R., quisiera consultar disponibilidad para pedir directo: ${quickViewQty}x ${product.name} (${product.format}) por ${formatCLP(total)}.`;
+                openWhatsApp(msg);
+            };
+
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                modal.querySelector('div').classList.remove('scale-95');
+            }, 10);
+        };
+
+        const closeQuickView = (e) => {
+            const modal = document.getElementById('quickViewModal');
+            modal.classList.add('opacity-0');
+            modal.querySelector('div').classList.add('scale-95');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 300);
+        };
+
+        const adjustModalQty = (delta) => {
+            quickViewQty = Math.max(1, quickViewQty + delta);
+            document.getElementById('modalQuantity').textContent = quickViewQty;
+        };
+
+
+        // 12. TOAST SYSTEM
+        const showToast = (message) => {
+            const toast = document.getElementById('toastNotification');
+            const msgEl = document.getElementById('toastMessage');
+            msgEl.textContent = message;
+
+            toast.classList.remove('opacity-0', 'translate-y-4', 'pointer-events-none');
+            toast.classList.add('opacity-100', 'translate-y-0');
+
+            setTimeout(() => {
+                toast.classList.remove('opacity-100', 'translate-y-0');
+                toast.classList.add('opacity-0', 'translate-y-4', 'pointer-events-none');
+            }, 3500);
+        };
+
+        
+        // CONTROLADOR DE FILTROS EN MÓVIL (BOTTOM SHEET)
+        const toggleMobileFilters = (open = true) => {
+            const backdrop = document.getElementById('mobileFilterBackdrop');
+            const drawer = document.getElementById('mobileFilterDrawer');
+            if (!backdrop || !drawer) return;
+
+            if (open) {
+                renderMobileFilterCategories();
+                backdrop.classList.remove('hidden');
+                setTimeout(() => {
+                    backdrop.classList.remove('opacity-0');
+                    drawer.classList.remove('translate-y-full');
+                }, 10);
+            } else {
+                backdrop.classList.add('opacity-0');
+                drawer.classList.add('translate-y-full');
+                setTimeout(() => {
+                    backdrop.classList.add('hidden');
+                }, 300);
+            }
+        };
+
+        const renderMobileFilterCategories = () => {
+            const container = document.getElementById('mobileFilterCategoryList');
+            if (!container) return;
+
+            container.innerHTML = CATEGORIES.map(cat => {
+                const isActive = activeCategory === cat.id;
+                return `
+                    <button 
+                        onclick="setCategory('${cat.id}'); renderMobileFilterCategories();"
+                        class="p-2.5 rounded-xl text-xs font-extrabold text-left transition-all border ${
+                            isActive 
+                                ? 'bg-neutral-950 text-white border-neutral-950 shadow-sm' 
+                                : 'bg-neutral-50 text-neutral-700 border-neutral-200 hover:bg-neutral-100'
+                        }"
+                    >
+                        <i class="ph ${cat.icon} text-sm mr-1"></i>
+                        ${cat.name}
+                    </button>
+                `;
+            }).join('');
+
+            // Sincronizar checkbox y sliders en mobile
+            const mobileCheckbox = document.getElementById('mobileOnlyOffersCheckbox');
+            if (mobileCheckbox) mobileCheckbox.checked = onlyOffers;
+
+            const mobileSlider = document.getElementById('mobilePriceRangeInput');
+            const desktopSlider = document.getElementById('priceRangeInput');
+            if (mobileSlider && desktopSlider) {
+                mobileSlider.value = desktopSlider.value;
+                document.getElementById('mobilePriceRangeDisplay').textContent = formatCLP(desktopSlider.value);
+            }
+
+            const mobileSort = document.getElementById('mobileSortSelector');
+            if (mobileSort) mobileSort.value = sortBy;
+        };
+
+
+        // INICIALIZACIÓN COMPLETA AL CARGAR EL DOM
+        document.addEventListener('DOMContentLoaded', () => {
+            renderCategoryNav();
+            renderCatalog();
+            renderFlashDeals();
+            renderWholesale();
+            renderReviews();
+            renderInstagramFeed();
+            updateCartBadges();
+            updateCartUI();
+        });
+
+    </script>
+</body>
+</html>
